@@ -11,14 +11,15 @@
       this.asset = this.add.sprite(this.game.width * 0.5 - 110, this.game.height * 0.5 - 10, 'preloader');
       this.load.setPreloadSprite(this.asset);
 
-      // this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
-      // this.loadResources();
+       this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
+       this.loadResources();
 
       this.ready = true;
     },
 
     loadResources: function () {
-      // load your assets here
+        this.game.load.image('background','assets/grass1.png');
+        this.game.load.image('player','assets/ufo.png');
     },
 
     create: function () {
@@ -32,7 +33,7 @@
     },
 
     onLoadComplete: function () {
-      // this.ready = true;
+       this.ready = true;
     }
   };
 
