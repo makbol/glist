@@ -9,6 +9,9 @@ import pl.edu.agh.commands.SampleCommandWithParam;
  */
 public abstract class BaseCommand {
 
+    /** Parametry wywolania komendy. Pod kluczem 0 zawsze bedzie nazwa komendy! */
+    protected final String[] params;
+
     /** Kod bledu. */
     protected int errorNo = 0;
 
@@ -17,9 +20,6 @@ public abstract class BaseCommand {
 
     /** Resultat wywolania komendy. */
     protected String[] result = new String[0];
-
-    /** Parametry wywolania komendy. Pod kluczem 0 zawsze bedzie nazwa komendy! */
-    protected String[] params;
 
     public BaseCommand(String[] params) {
         this.params = params;
@@ -56,5 +56,9 @@ public abstract class BaseCommand {
 
     public String getErrorDesc() {
         return errorDesc;
+    }
+
+    public String[] getResult() {
+        return result;
     }
 }
