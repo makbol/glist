@@ -24,12 +24,14 @@ public class Room {
     /**
      * Wywolanie komendy w danym pokoju. Logika zalezna od komendy.
      * @param command komenda do wylowania
-     * @param user uzytkownik wolajacy komende
+     * @param user uzytkownik wolajacy komende (null jesli komenda dla wszystkich userow)
      * @return zwraca komende po wywolaniu
      */
     public <T extends BaseCommand> BaseCommand executeCommand(T command, User user) {
         command.execute(this, user);
-        user.setLastCommandDate(new Date());
+        if(user != null) {
+            user.setLastCommandDate(new Date());
+        }
         return command;
     }
 
