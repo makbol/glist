@@ -16,17 +16,24 @@
     },
 
     update: function () {
+      var state = window['tron'].State;
+      var directions = window['tron'].DIRECTIONS;
       player.body.setZeroVelocity();
+
       if (this.cursors.up.isDown) {
-        player.body.moveUp(300)
+        player.body.moveUp(300);
+        state.setDirectionIfAllowed(directions.NORTH);
       } else if (this.cursors.down.isDown) {
         player.body.moveDown(300);
+        state.setDirectionIfAllowed(directions.SOUTH);
       }
 
       if (this.cursors.left.isDown) {
         player.body.velocity.x = -300;
+        state.setDirectionIfAllowed(directions.LEFT);
       } else if (this.cursors.right.isDown) {
         player.body.moveRight(300);
+        state.setDirectionIfAllowed(directions.RIGHT);
       }
     },
 
