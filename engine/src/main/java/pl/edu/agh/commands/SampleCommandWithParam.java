@@ -7,7 +7,8 @@ import pl.edu.agh.core.User;
 /**
  * Przykladowa komenda korzystajaca z parametrow. Parsuje ona parametry z konstruktora i zapisuje w odpowiednich polach.
  * Mozna tez korzystac z parametrow ktore same zapisuja sie w polu {@link BaseCommand#params} jednak tak jest czytelniej.
- * <b>Pod kluczem 0 w parametrach zawsze bedzie nazwa komendy!</b>
+ * <b>Pod kluczem 0 w parametrach zawsze bedzie nazwa komendy!</b><br><br>
+ * Opowiada wywolaniu z przegladarki komendy "CommandWithParam;x;y"
  */
 public class SampleCommandWithParam extends BaseCommand{
 

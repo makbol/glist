@@ -6,7 +6,8 @@ import pl.edu.agh.core.User;
 
 /**
  * W tej komendzie widzimy co zrobic jesli w wywowaniu komendy nastepuje blad lub lapiemy wyjatek.
- * Mianowice ustawiamy wtedy odpowiednio errorNo i errorDesc.
+ * Mianowice ustawiamy wtedy odpowiednio errorNo i errorDesc.<br><br>
+ * Opowiada wywolaniu z przegladarki komendy "CommandWithError;param1;param2,..."
  */
 public class SampleCommandWithErrorHandling extends BaseCommand {
 

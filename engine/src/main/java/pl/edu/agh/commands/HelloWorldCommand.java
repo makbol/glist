@@ -5,7 +5,8 @@ import pl.edu.agh.core.Room;
 import pl.edu.agh.core.User;
 
 /**
- * Przykladowa komedna.
+ * Przykladowa komedna.<br><br>
+ * Opowiada wywolaniu z przegladarki komendy "HellowWorld;param1;param2,..."
  */
 public class HelloWorldCommand extends BaseCommand {
 
