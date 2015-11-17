@@ -9,7 +9,7 @@ public class Board {
     private Timestamp timeofGame;
     private int height = 20;
     private int width = 20;
-    private int[][] tabBoard = new int[height][width];
+    public int[][] tabBoard = new int[height][width];
 
     public void displayOrCleanTabBoard(boolean clean) {
         for (int j = 0; j < height; j++) {
@@ -23,11 +23,5 @@ public class Board {
             if (!clean) System.out.println("");
         }
 
-    }
-
-    public static void main(String[] args) {
-        Board board = new Board();
-        board.displayOrCleanTabBoard(true);
-        board.displayOrCleanTabBoard(false);
     }
 }
