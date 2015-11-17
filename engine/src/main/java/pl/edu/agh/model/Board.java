@@ -1,12 +1,7 @@
 package pl.edu.agh.model;
 
-import java.security.Timestamp;
-
-/**
- * Created by mkostrzewa on 2015-11-17.
- */
 public class Board {
-    private Timestamp timeofGame;
+    private int timeofGame;
     private int height = 20;
     private int width = 20;
     public int[][] tabBoard = new int[height][width];

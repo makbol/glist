@@ -1,14 +1,9 @@
 package pl.edu.agh.model;
 
-import java.security.Timestamp;
-
-/**
- * Created by mkostrzewa on 2015-11-17.
- */
 public class Player {
     private int x;
     private int y;
-    private Timestamp timeOfDeath;
+    private int timeOfDeath;
     private Direction direction;
 
     public int getX() {
@@ -27,11 +22,11 @@ public class Player {
         this.y = y;
     }
 
-    public Timestamp getTimeOfDeath() {
+    public int getTimeOfDeath() {
         return timeOfDeath;
     }
 
-    public void setTimeOfDeath(Timestamp timeOfDeath) {
+    public void setTimeOfDeath(int timeOfDeath) {
         this.timeOfDeath = timeOfDeath;
     }
 
@@ -47,6 +42,6 @@ public class Player {
         N,
         W,
         E,
-        S;
+        S
     }
 }
