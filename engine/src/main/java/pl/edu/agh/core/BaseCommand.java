@@ -1,5 +1,6 @@
 package pl.edu.agh.core;
 
+import pl.edu.agh.commands.GetUsersList;
 import pl.edu.agh.commands.HelloWorldCommand;
 import pl.edu.agh.commands.SampleCommandWithErrorHandling;
 import pl.edu.agh.commands.SampleCommandWithParam;
@@ -18,8 +19,8 @@ public abstract class BaseCommand {
     /** Opis bledu */
     protected String errorDesc = "";
 
-    /** Resultat wywolania komendy. */
-    protected String result = "";
+    /** Resultat wywolania komendy. Domyslnie null - czyli brak rezultatu. */
+    protected String result = null;
 
     public BaseCommand(String[] params) {
         this.params = params;
@@ -37,6 +38,8 @@ public abstract class BaseCommand {
                 return new SampleCommandWithParam(command);
             case SampleCommandWithErrorHandling.COMMAND_NAME:
                 return new SampleCommandWithErrorHandling(command);
+            case GetUsersList.COMMAND_NAME:
+                return new GetUsersList(command);
             default:
                 return new HelloWorldCommand(command);
         }
