@@ -19,7 +19,7 @@ public abstract class BaseCommand {
     protected String errorDesc = "";
 
     /** Resultat wywolania komendy. */
-    protected String[] result = new String[0];
+    protected String result = "";
 
     public BaseCommand(String[] params) {
         this.params = params;
@@ -46,9 +46,9 @@ public abstract class BaseCommand {
      * Implementuje logike komendy.
      * Jesli komenda powinna cos zwrocic wynik jej wywolania ladujemy do result.
      * @param room pokoj na ktorym wykonywana jest operacja
-     * @param user uzytkownik wolajacy komende
+     * @param player uzytkownik wolajacy komende
      */
-    abstract protected void execute(Room room, User user);
+    abstract protected void execute(Room room, Player player);
 
     public int getErrorNo() {
         return errorNo;
@@ -58,7 +58,7 @@ public abstract class BaseCommand {
         return errorDesc;
     }
 
-    public String[] getResult() {
+    public String getResult() {
         return result;
     }
 }

@@ -1,8 +1,8 @@
 package pl.edu.agh.commands;
 
 import pl.edu.agh.core.BaseCommand;
+import pl.edu.agh.core.Player;
 import pl.edu.agh.core.Room;
-import pl.edu.agh.core.User;
 
 /**
  * W tej komendzie widzimy co zrobic jesli w wywowaniu komendy nastepuje blad lub lapiemy wyjatek.
@@ -19,16 +19,14 @@ public class SampleCommandWithErrorHandling extends BaseCommand {
     }
 
     @Override
-    protected void execute(Room room, User user) {
+    protected void execute(Room room, Player player) {
         try {
-            if (!room.getUsers().contains(user)) {
+            if (!room.getPlayers().contains(player)) {
                 errorNo = 66;
-                errorDesc = "W pokoju " + room.getRoomNo() + " nie ma uzytkownika " + user.getUsername();
+                errorDesc = "W pokoju " + room.getRoomNo() + " nie ma uzytkownika " + player.getUsername();
                 return;
             }
-            result = new String[]{
-                    "Uzytkownik jest w pokoju!"
-            };
+            result = "Uzytkownik jest w pokoju!";
         } catch (Exception e) {
             errorNo = -1;
             errorDesc = e.getMessage();

@@ -34,7 +34,7 @@ public class TronClientSession extends Thread {
     
     private PrintStream clientOut;
     private BufferedReader clientInput;
-    private User player;
+    private Player player;
     
     /**
      * Inicjalizuje wątek sesji.

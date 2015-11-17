@@ -2,7 +2,7 @@ package pl.edu.agh.commands;
 
 import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
-import pl.edu.agh.core.User;
+import pl.edu.agh.core.Player;
 
 /**
  * Przykladowa komedna.<br><br>
@@ -18,11 +18,9 @@ public class HelloWorldCommand extends BaseCommand {
     }
 
     @Override
-    protected void execute(Room room, User user) {
-        result = new String[] {
-                "Hello World!",
-                "Called on room: " + room.getRoomNo(),
-                "Called by user: " + user.getUsername()
-        };
+    protected void execute(Room room, Player player) {
+        result = "Hello World!" +
+                "Called on room: " + room.getRoomNo() +
+                "Called by player: " + player.getUsername();
     }
 }
