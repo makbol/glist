@@ -26,6 +26,7 @@ public class TronListener extends Thread {
     public TronListener( int listenPort ) throws IOException {
         super(LISTENER_THREAD_NAME);
         connections = new HashMap<>();
+        serverPort = listenPort;
     }
 
     @Override
@@ -42,11 +43,13 @@ public class TronListener extends Thread {
         
         while( !Thread.interrupted() ) {
             try{
+                System.out.println("wait for c");
                 Socket client = server.accept();
                 TronClientSession session = 
                         new TronClientSession(client, 
                                               0, 
                                               this::handleConnectionTermination);
+                session.start();
                 synchronized(connections) {
                     connections.put(findFreeSessionID(), session);
                 }

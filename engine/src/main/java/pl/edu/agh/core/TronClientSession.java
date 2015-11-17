@@ -34,6 +34,7 @@ public class TronClientSession extends Thread {
     
     private PrintStream clientOut;
     private BufferedReader clientInput;
+    private Player player;
     
     /**
      * Inicjalizuje wątek sesji.
@@ -155,7 +156,7 @@ public class TronClientSession extends Thread {
             throw new IllegalStateException(uee);
         }
         clientInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        quitPattern = Pattern.compile(" ^q& | ^e& | ^quit& | ^exit&");
+        quitPattern = Pattern.compile("^q$|^e&|^exit&|^quit$");
     }
     protected void close() throws IOException {
         clientInput.close();
@@ -165,14 +166,12 @@ public class TronClientSession extends Thread {
     
     protected boolean handleCommand(String[] command,List<String> additionalLines) {
         switch(command[0]) {
-            case "authorize" : 
-                if( command.length > 1 ) {
-                    authorizeAs(command[1]);
-                } else {
-                    authorize();
-                }
             
-            default : return true;    
+            default :
+               BaseCommand cmd = BaseCommand.getCommand(command);
+               cmd.execute(TronServer.getInstance().getRoom(), player);
+               
+               return true;
         }
     }
     

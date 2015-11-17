@@ -1,5 +1,7 @@
 package pl.edu.agh.core;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -10,27 +12,34 @@ import java.util.UUID;
 public class Player implements Serializable {
 
     /** Id uzytkownika */
+    @Expose
     private final UUID userId = UUID.randomUUID();
 
     /** Login uzytkownika */
+    @Expose
     private final String username;
 
     /** Data wywloania ostatniej komendy */
     private Date lastCommandDate;
 
     /** Wspolrzedna x gracza */
+    @Expose
     private int x;
 
     /** Wspolrzedna y gracza */
+    @Expose
     private int y;
 
     /** Predkosc gracza wzdloz osi x */
+    @Expose
     private int vx;
 
     /** Predkosc gracza wzdloz osi y */
+    @Expose
     private int vy;
 
     /** Kolor gracza */
+    @Expose
     private String color = "red";
 
     /** Czy uzytkownik jeszcze moze sie poruszac */
