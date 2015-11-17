@@ -2,7 +2,7 @@ package pl.edu.agh.commands;
 
 import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
-import pl.edu.agh.core.User;
+import pl.edu.agh.core.Player;
 
 /**
  * Przykladowa komenda korzystajaca z parametrow. Parsuje ona parametry z konstruktora i zapisuje w odpowiednich polach.
@@ -26,10 +26,7 @@ public class SampleCommandWithParam extends BaseCommand{
     }
 
     @Override
-    protected void execute(Room room, User user) {
-        result = new String[] {
-            "Uzytkownika przesunieto o x:" + x + " y:" + y
-        };
-
+    protected void execute(Room room, Player player) {
+        result = "Uzytkownika przesunieto o x:" + x + " y:" + y;
     }
 }
