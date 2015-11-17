@@ -11,11 +11,13 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import pl.edu.agh.commands.JoinCommand;
 
 /**
  *
@@ -165,23 +167,20 @@ public class TronClientSession extends Thread {
     }
     
     protected boolean handleCommand(String[] command,List<String> additionalLines) {
+        System.out.println(Arrays.toString(command));
         switch(command[0]) {
-            
             default :
                BaseCommand cmd = BaseCommand.getCommand(command);
                cmd.execute(TronServer.getInstance().getRoom(), player);
-               
+               if( cmd.getResult() != null ) {
+                   clientOut.println(cmd.getResult());
+                   clientOut.flush();
+               }
+              
+                if( cmd instanceof JoinCommand ) {
+                   player = ((JoinCommand)cmd).getJoinedPlayer();
+               }
                return true;
         }
     }
-    
-    protected void authorize() {
-        
-    }
-    
-    protected void authorizeAs( String userID  ) {
-        
-    }
-    
-    
 }

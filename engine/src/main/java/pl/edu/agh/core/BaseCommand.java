@@ -1,6 +1,7 @@
 package pl.edu.agh.core;
 
 import pl.edu.agh.commands.HelloWorldCommand;
+import pl.edu.agh.commands.JoinCommand;
 import pl.edu.agh.commands.SampleCommandWithErrorHandling;
 import pl.edu.agh.commands.SampleCommandWithParam;
 
@@ -37,6 +38,8 @@ public abstract class BaseCommand {
                 return new SampleCommandWithParam(command);
             case SampleCommandWithErrorHandling.COMMAND_NAME:
                 return new SampleCommandWithErrorHandling(command);
+            case JoinCommand.COMMAND_NAME :
+                return new JoinCommand(command);
             default:
                 return new HelloWorldCommand(command);
         }
@@ -50,6 +53,8 @@ public abstract class BaseCommand {
      */
     abstract protected void execute(Room room, Player player);
 
+   
+    
     public int getErrorNo() {
         return errorNo;
     }
