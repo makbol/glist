@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Bartosz Sadel
+ * Komenda pobiera liste aktywnych (zyjacych) graczy
  */
-public class GetUsersList extends BaseCommand {
+public class GetActiveUsersList extends BaseCommand {
 
     /** Nazwa komendy */
-    public static final String COMMAND_NAME = "getUsersList";
+    public static final String COMMAND_NAME = "getActiveUsersList";
 
-    public GetUsersList(String[] params) {
+    public GetActiveUsersList(String[] params) {
         super(params);
     }
 

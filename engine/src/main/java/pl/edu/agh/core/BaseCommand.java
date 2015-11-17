@@ -1,6 +1,6 @@
 package pl.edu.agh.core;
 
-import pl.edu.agh.commands.GetUsersList;
+import pl.edu.agh.commands.GetActiveUsersList;
 import pl.edu.agh.commands.HelloWorldCommand;
 import pl.edu.agh.commands.SampleCommandWithErrorHandling;
 import pl.edu.agh.commands.SampleCommandWithParam;
@@ -38,8 +38,8 @@ public abstract class BaseCommand {
                 return new SampleCommandWithParam(command);
             case SampleCommandWithErrorHandling.COMMAND_NAME:
                 return new SampleCommandWithErrorHandling(command);
-            case GetUsersList.COMMAND_NAME:
-                return new GetUsersList(command);
+            case GetActiveUsersList.COMMAND_NAME:
+                return new GetActiveUsersList(command);
             default:
                 return new HelloWorldCommand(command);
         }
