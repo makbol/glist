@@ -29,4 +29,9 @@ public class SampleCommandWithParam extends BaseCommand{
     protected void execute(Room room, Player player) {
         result = "Uzytkownika przesunieto o x:" + x + " y:" + y;
     }
+
+    @Override
+    public String getCommandName() {
+        return COMMAND_NAME;
+    }
 }

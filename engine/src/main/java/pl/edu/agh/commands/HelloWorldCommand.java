@@ -23,4 +23,9 @@ public class HelloWorldCommand extends BaseCommand {
                 "Called on room: " + room.getRoomNo() +
                 "Called by player: " + player.getUsername();
     }
+
+    @Override
+    public String getCommandName() {
+        return COMMAND_NAME;
+    }
 }

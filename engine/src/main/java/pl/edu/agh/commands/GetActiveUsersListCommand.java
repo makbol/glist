@@ -12,12 +12,12 @@ import java.util.List;
 /**
  * Komenda pobiera liste aktywnych (zyjacych) graczy
  */
-public class GetActiveUsersList extends BaseCommand {
+public class GetActiveUsersListCommand extends BaseCommand {
 
     /** Nazwa komendy */
     public static final String COMMAND_NAME = "getActiveUsersList";
 
-    public GetActiveUsersList(String[] params) {
+    public GetActiveUsersListCommand(String[] params) {
         super(params);
     }
 
@@ -33,5 +33,10 @@ public class GetActiveUsersList extends BaseCommand {
 
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         result = gson.toJson(activePlayers);
+    }
+
+    @Override
+    public String getCommandName() {
+        return COMMAND_NAME;
     }
 }

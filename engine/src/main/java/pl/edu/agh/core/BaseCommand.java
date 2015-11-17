@@ -1,14 +1,23 @@
 package pl.edu.agh.core;
 
-import pl.edu.agh.commands.GetActiveUsersList;
+import com.google.gson.Gson;
+import pl.edu.agh.commands.GetActiveUsersListCommand;
 import pl.edu.agh.commands.HelloWorldCommand;
 import pl.edu.agh.commands.SampleCommandWithErrorHandling;
 import pl.edu.agh.commands.SampleCommandWithParam;
+
+import java.util.Properties;
 
 /**
  * Szablon komendy.
  */
 public abstract class BaseCommand {
+
+    /** Nazwa parametru wynikowego zawierajacego nazwe komendy. */
+    public static final String COMMAND_NAME_PARAM = "commandName";
+
+    /** Nazwa parametru wynikowego zawierajacego wynik komendy. */
+    public static final String RESULT_PARAM = "result";
 
     /** Parametry wywolania komendy. Pod kluczem 0 zawsze bedzie nazwa komendy! */
     protected final String[] params;
@@ -38,8 +47,8 @@ public abstract class BaseCommand {
                 return new SampleCommandWithParam(command);
             case SampleCommandWithErrorHandling.COMMAND_NAME:
                 return new SampleCommandWithErrorHandling(command);
-            case GetActiveUsersList.COMMAND_NAME:
-                return new GetActiveUsersList(command);
+            case GetActiveUsersListCommand.COMMAND_NAME:
+                return new GetActiveUsersListCommand(command);
             default:
                 return new HelloWorldCommand(command);
         }
@@ -52,6 +61,16 @@ public abstract class BaseCommand {
      * @param player uzytkownik wolajacy komende
      */
     abstract protected void execute(Room room, Player player);
+
+    /** Zwraca wynik wywolania metody w postaci jsona */
+    public String getJsonResponse() {
+        Properties result = new Properties();
+        result.put(COMMAND_NAME_PARAM, getCommandName());
+        result.put(RESULT_PARAM, this.result);
+        return new Gson().toJson(result);
+    }
+
+    public abstract String getCommandName();
 
     public int getErrorNo() {
         return errorNo;
