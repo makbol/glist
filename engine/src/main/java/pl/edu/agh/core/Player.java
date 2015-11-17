@@ -41,6 +41,12 @@ public class Player implements Serializable {
     /** Kolor gracza */
     @Expose
     private String color = "red";
+    
+    private static final double POINTS_PER_FRAME = 0.1666667;
+
+    @Expose
+	private int score;	
+	
 
     /** Czy uzytkownik jeszcze moze sie poruszac */
     private boolean alive;
@@ -112,4 +118,17 @@ public class Player implements Serializable {
     public void setColor(String color) {
         this.color = color;
     }
+    
+	public int getScore() {
+		return score;
+	}
+	
+	public void updateScore(int deathTime) {
+		score += calculatePointForTheRound(deathTime);
+	}
+		
+	private int calculatePointForTheRound(int deathTime) {
+		return (int) (deathTime * POINTS_PER_FRAME);
+	}
+
 }
