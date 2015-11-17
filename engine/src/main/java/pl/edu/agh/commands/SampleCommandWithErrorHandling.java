@@ -32,4 +32,9 @@ public class SampleCommandWithErrorHandling extends BaseCommand {
             errorDesc = e.getMessage();
         }
     }
+
+    @Override
+    public String getCommandName() {
+        return COMMAND_NAME;
+    }
 }

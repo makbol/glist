@@ -1,5 +1,7 @@
 package pl.edu.agh.core;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -10,28 +12,41 @@ import java.util.UUID;
 public class Player implements Serializable {
 
     /** Id uzytkownika */
+    @Expose
     private final UUID userId = UUID.randomUUID();
 
     /** Login uzytkownika */
+    @Expose
     private final String username;
 
     /** Data wywloania ostatniej komendy */
     private Date lastCommandDate;
 
     /** Wspolrzedna x gracza */
+    @Expose
     private int x;
 
     /** Wspolrzedna y gracza */
+    @Expose
     private int y;
 
     /** Predkosc gracza wzdloz osi x */
+    @Expose
     private int vx;
 
     /** Predkosc gracza wzdloz osi y */
+    @Expose
     private int vy;
 
     /** Kolor gracza */
+    @Expose
     private String color = "red";
+    
+    private static final double POINTS_PER_FRAME = 0.1666667;
+
+    @Expose
+	private int score;	
+	
 
     /** Czy uzytkownik jeszcze moze sie poruszac */
     private boolean alive;
@@ -103,4 +118,17 @@ public class Player implements Serializable {
     public void setColor(String color) {
         this.color = color;
     }
+    
+	public int getScore() {
+		return score;
+	}
+	
+	public void updateScore(int deathTime) {
+		score += calculatePointForTheRound(deathTime);
+	}
+		
+	private int calculatePointForTheRound(int deathTime) {
+		return (int) (deathTime * POINTS_PER_FRAME);
+	}
+
 }
