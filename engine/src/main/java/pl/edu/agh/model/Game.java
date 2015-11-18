@@ -1,39 +1,80 @@
 package pl.edu.agh.model;
 
-import java.util.List;
+import pl.edu.agh.util.BoardSizeException;
+import pl.edu.agh.util.EnumIdOutOfBoundsException;
 
-/**
- * Created by mkostrzewa on 2015-11-17.
- */
-public class Game implements Runnable{
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class Game implements Runnable {
     private Board board;
     private List<Player> playersList;
 
     public static void main(String[] args) {
         Game game = new Game();
+        game.playersList = new ArrayList<>();
         game.run();
     }
 
     public void run() {
-        Game game = new Game();
-        Player player1 = new Player();
-        Board board = new Board();
-        int startXPosition = 1;
-        int startYPosition = 1;
-        player1.setX(startXPosition);
-        player1.setY(startYPosition);
-        //TODO sprawdzenie kierunku
-        player1.setDirection(Player.Direction.S);
-        board.displayOrCleanTabBoard(true);
-        while(true) {
+        int width = 20;
+        int height = 20;
+        try {
+            board = new Board(width, height);
+        } catch (BoardSizeException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 1; i < 5; i++)
+            playersList.add(new Player(i));
+
+        Random random = new Random();
+
+        for (Player p : playersList) {
+            p.setX(random.nextInt(width));
+            p.setY(random.nextInt(height));
             try {
-                board.tabBoard[player1.getX()][player1.getY()] = 1;
-                player1.setX(++startXPosition);
-                board.displayOrCleanTabBoard(false);
+                p.setDirection(Player.Direction.parse(random.nextInt(4)));
+                board.setPlayerPosition(p.getX(), p.getY(), p.getId());
+            } catch (EnumIdOutOfBoundsException | BoardSizeException e) {
+                e.printStackTrace();
+            }
+        }
+
+        while (true) {
+            try {
+                for (Player p : playersList) {
+                    switch (p.getDirection()) {
+                        case N:
+                            p.setY(p.getY() + 1);
+                            break;
+                        case S:
+                            p.setY(p.getY() - 1);
+                            break;
+                        case E:
+                            p.setX(p.getX() + 1);
+                            break;
+                        case W:
+                            p.setX(p.getX() - 1);
+                            break;
+                    }
+                    try {
+                        board.setPlayerPosition(p.getX(), p.getY(), p.getId());
+                    } catch (BoardSizeException e) {
+                        e.printStackTrace();
+                    }
+                }
+                board.drawBoard();
+
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void calculateGameTick() {
+
     }
 }
