@@ -1,8 +1,5 @@
 package pl.edu.agh.core;
 
-import pl.edu.agh.core.BaseCommand;
-import pl.edu.agh.core.User;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,35 +16,46 @@ public class Room {
     private final long roomNo = ++roomCounter;
 
     /** Uczestnicy w pokoju */
-    private List<User> users = new ArrayList<User>();
+    private List<Player> players = new ArrayList<>();
+
+    /** Gra jesli jest rozpoczeta. */
+    private Game game = null;
+
+    public void startNewGame() {
+        game = new Game(players);
+    }
 
     /**
      * Wywolanie komendy w danym pokoju. Logika zalezna od komendy.
      * @param command komenda do wylowania
-     * @param user uzytkownik wolajacy komende (null jesli komenda dla wszystkich userow)
+     * @param player uzytkownik wolajacy komende (null jesli komenda dla wszystkich userow)
      * @return zwraca komende po wywolaniu
      */
-    public <T extends BaseCommand> BaseCommand executeCommand(T command, User user) {
-        command.execute(this, user);
-        if(user != null) {
-            user.setLastCommandDate(new Date());
+    public <T extends BaseCommand> BaseCommand executeCommand(T command, Player player) {
+        command.execute(this, player);
+        if(player != null) {
+            player.setLastCommandDate(new Date());
         }
         return command;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setPlayers(List<Player> players) {
+        this.players = players;
     }
 
-    public void addUser(User user) {
-        this.users.add(user);
+    public void addUser(Player player) {
+        this.players.add(player);
     }
 
     public long getRoomNo() {
         return roomNo;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

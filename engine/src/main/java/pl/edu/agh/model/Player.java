@@ -1,10 +1,21 @@
 package pl.edu.agh.model;
 
+import pl.edu.agh.util.EnumIdOutOfBoundsException;
+
 public class Player {
+    private int id;
     private int x;
     private int y;
     private int timeOfDeath;
     private Direction direction;
+
+    public Player(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     public int getX() {
         return x;
@@ -42,6 +53,21 @@ public class Player {
         N,
         W,
         E,
-        S
+        S;
+
+        public static Direction parse(int n) throws EnumIdOutOfBoundsException {
+            switch (n) {
+                case 0:
+                    return N;
+                case 1:
+                    return E;
+                case 2:
+                    return S;
+                case 3:
+                    return W;
+                default:
+                    throw new EnumIdOutOfBoundsException("Selected direction id doesn't make sense.");
+            }
+        }
     }
 }
