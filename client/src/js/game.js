@@ -1,7 +1,17 @@
 (function() {
   'use strict';
 
+
+  var players = [{
+    'x' : 1,
+    'y' : 1,
+    'v_x' : 1,
+    'v_y' : 1,
+    'color' : 'red'
+  }]
+
   function Game() {}
+
 
   Game.prototype = {
     create: function () {
