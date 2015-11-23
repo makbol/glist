@@ -47,7 +47,7 @@ public class Room {
         this.players = players;
     }
 
-    public void addUser(Player player) {
+    public void addPlayer(Player player) {
         this.players.add(player);
     }
 

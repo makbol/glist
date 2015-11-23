@@ -1,11 +1,7 @@
 package pl.edu.agh.core;
 
 import com.google.gson.Gson;
-import pl.edu.agh.commands.GetActiveUsersListCommand;
-import pl.edu.agh.commands.HelloWorldCommand;
-import pl.edu.agh.commands.JoinCommand;
-import pl.edu.agh.commands.SampleCommandWithErrorHandling;
-import pl.edu.agh.commands.SampleCommandWithParam;
+import pl.edu.agh.commands.*;
 
 import java.util.Properties;
 
@@ -48,10 +44,12 @@ public abstract class BaseCommand {
                 return new SampleCommandWithParam(command);
             case SampleCommandWithErrorHandling.COMMAND_NAME:
                 return new SampleCommandWithErrorHandling(command);
-            case JoinCommand.COMMAND_NAME :
-                return new JoinCommand(command);
+            case JoinGameCommand.COMMAND_NAME :
+                return new JoinGameCommand(command);
             case GetActiveUsersListCommand.COMMAND_NAME:
                 return new GetActiveUsersListCommand(command);
+            case StartNewGameCommand.COMMAND_NAME:
+                return new StartNewGameCommand(command);
             default:
                 return new HelloWorldCommand(command);
         }
