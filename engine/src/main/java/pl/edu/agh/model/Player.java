@@ -1,6 +1,8 @@
 package pl.edu.agh.model;
 
 import com.google.gson.annotations.Expose;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import pl.edu.agh.util.EnumIdOutOfBoundsException;
 
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.util.UUID;
 
 public class Player implements Serializable {
     private static final double POINTS_PER_FRAME = 0.1666667;
+
+    private static final Logger LOGGER = LogManager.getLogger(Player.class);
 
     /**
      * Id uzytkownika
@@ -137,7 +141,7 @@ public class Player implements Serializable {
         this.direction = direction;
     }
 
-    enum Direction {
+    public enum Direction {
         N,
         W,
         E,
@@ -155,6 +159,22 @@ public class Player implements Serializable {
                     return W;
                 default:
                     throw new EnumIdOutOfBoundsException("Selected direction id doesn't make sense.");
+            }
+        }
+
+        public static Direction parse(String n) {
+            switch (n) {
+                case "NORTH":
+                    return N;
+                case "EAST":
+                    return E;
+                case "SOUTH":
+                    return S;
+                case "WEST":
+                    return W;
+                default:
+                    LOGGER.warn("parse", "Wrong direction");
+                    return N;
             }
         }
     }

@@ -17,10 +17,10 @@ public abstract class BaseCommand {
     /** Nazwa parametru wynikowego zawierajacego wynik komendy. */
     public static final String RESULT_PARAM = "result";
 
-     /** Nazwa parametru wynikowego zaierającego kod błędu. */
+     /** Nazwa parametru wynikowego zaierajacego kod bldu. */
     public static final String COMMAND_ERROR_CODE_PARAM = "errCode";
     
-     /** Nazwa parametru wynikowego zaierającego opis błędu */
+     /** Nazwa parametru wynikowego zaierajacego opis bldu */
     public static final String COMMAND_ERROR_DESC_PARAM = "err";
     
     /** Parametry wywolania komendy. Pod kluczem 0 zawsze bedzie nazwa komendy! */
@@ -47,10 +47,6 @@ public abstract class BaseCommand {
         switch (command[0]) {
             case HelloWorldCommand.COMMAND_NAME:
                 return (T) new HelloWorldCommand(command);
-            case SampleCommandWithParam.COMMAND_NAME:
-                return (T) new SampleCommandWithParam(command);
-            case SampleCommandWithErrorHandling.COMMAND_NAME:
-                return (T) new SampleCommandWithErrorHandling(command);
             case JoinGameCommand.COMMAND_NAME :
                 return (T) new JoinGameCommand(command);
             case GetActiveUsersListCommand.COMMAND_NAME:
