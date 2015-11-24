@@ -19,6 +19,7 @@ window.addEventListener('load', function () {
 
    var ns = window['tron'];
    var ws;
+   window['ws'] = ws;
 
    function initiateWebSocketConnection() {
       if ("WebSocket" in window) {
@@ -58,5 +59,5 @@ window.addEventListener('load', function () {
   game.state.add('game', ns.Game);
   /* yo phaser:state new-state-files-put-here */
   game.state.start('boot');
-  initiateWebSocketConnection();
+  //initiateWebSocketConnection();
 }, false);

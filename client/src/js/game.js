@@ -34,16 +34,20 @@
 
     update: function () {
       var state = window['tron'].State;
+        this.game.add.sprite(player.position.x-12, player.position.y-10, 'player');
+
 
         if (!this.keyLock) {
             if (this.leftKey.isDown) {
                 state.setDirection((state.getDirection() +  3)%4);
                 this.updateVelocity();
                 this.keyLock = true;
+                //window['ws'].send('STEROWANIE,' + Object.keys(directions)[state.getDirection()])
             } else if (this.rightKey.isDown) {
                 state.setDirection((state.getDirection() + 1)%4);
                 this.updateVelocity();
                 this.keyLock = true;
+                //window['ws'].send('STEROWANIE,' + Object.keys(directions)[state.getDirection()])
             }
         } else if (this.leftKey.isUp && this.rightKey.isUp) {
                 this.keyLock = false;
@@ -57,6 +61,7 @@
    updateVelocity: function() {
        var state = window['tron'].State;
        var directions = window['tron'].DIRECTIONS;
+       console.log(player)
        if (state.getDirection() == directions.WEST) {
            player.body.velocity.x -= this.velocity;
            player.body.velocity.y = 0;

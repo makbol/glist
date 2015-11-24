@@ -1,6 +1,8 @@
 (function () {
     'use strict';
 
+    //nie ruszac cyferek!!! ważne żeby zostały takie jakie są
+    //bo po dupie dostaniecie :O
     var directions = {
         NORTH: 0,
         EAST: 1,
