@@ -29,7 +29,7 @@ public class Game implements Runnable {
         int width = 20;
         int height = 20;
         try {
-            board = new Board(width, height);
+            board = new Board(width, height, playersList);
         } catch (BoardSizeException e) {
             e.printStackTrace();
         }
