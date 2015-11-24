@@ -14,8 +14,4 @@ hs_err_pid*
 # Editors
 .idea/
 *.iml
-<<<<<<< HEAD
 /engine/target/
-=======
-*sublime*
->>>>>>> 53044622072f90cb478d66eb18988e80f0ef1384
