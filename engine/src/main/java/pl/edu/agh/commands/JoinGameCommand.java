@@ -23,10 +23,12 @@ public class JoinGameCommand extends BaseCommand {
         if(params.length < 2 || params[1].isEmpty()) {
             errorNo = -1;
             errorDesc = "User name not provided.";
+            return;
         }
 
         addedPlayer = new Player(params[1]);
         room.addPlayer(player);
+        result = addedPlayer.getUserId().toString();
     }
 
     @Override

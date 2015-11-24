@@ -16,6 +16,12 @@ public abstract class BaseCommand {
     /** Nazwa parametru wynikowego zawierajacego wynik komendy. */
     public static final String RESULT_PARAM = "result";
 
+     /** Nazwa parametru wynikowego zaierającego kod błędu. */
+    public static final String COMMAND_ERROR_CODE_PARAM = "errCode";
+    
+     /** Nazwa parametru wynikowego zaierającego opis błędu */
+    public static final String COMMAND_ERROR_DESC_PARAM = "err";
+    
     /** Parametry wywolania komendy. Pod kluczem 0 zawsze bedzie nazwa komendy! */
     protected final String[] params;
 
@@ -55,6 +61,13 @@ public abstract class BaseCommand {
         }
     }
 
+    public static String createNoPlayerResponse() {
+        Properties result = new Properties();
+        result.put(COMMAND_ERROR_CODE_PARAM, -69);
+        result.put(COMMAND_ERROR_DESC_PARAM, "Wykonaj joinGame najpierw!");
+        return new Gson().toJson(result);
+    }
+    
     /**
      * Implementuje logike komendy.
      * Jesli komenda powinna cos zwrocic wynik jej wywolania ladujemy do result.
@@ -64,13 +77,31 @@ public abstract class BaseCommand {
     abstract protected void execute(Room room, Player player);
    
    
+    public boolean wasSuccessful() {
+        return errorNo==0;
+    }
+    
     /** Zwraca wynik wywolania metody w postaci jsona */
-    public String getJsonResponse() {
+    public String getResultResponse() {
+        if( !wasSuccessful() )  {
+            throw new IllegalStateException("There is no result when command failed");
+        }
         Properties result = new Properties();
         result.put(COMMAND_NAME_PARAM, getCommandName());
         result.put(RESULT_PARAM, this.result);
         return new Gson().toJson(result);
     }
+    public String getErrorResponse() {
+        if( wasSuccessful() ) {
+            throw new IllegalStateException(" Command did not fail. There is no error ");
+        }
+         Properties result = new Properties();
+        result.put(COMMAND_ERROR_CODE_PARAM, errorNo);
+        result.put(COMMAND_ERROR_DESC_PARAM, errorDesc);
+        return new Gson().toJson(result);
+    }
+    
+    
 
     public abstract String getCommandName();
 
