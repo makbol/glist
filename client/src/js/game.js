@@ -15,6 +15,9 @@
 
   Game.prototype = {
     create: function () {
+
+      // var this.game.add.group();
+
       this.input.onDown.add(this.onInputDown, this);
       this.game.add.tileSprite(0, 0, 1920, 1920, 'background');
       this.game.world.setBounds(0, 0, 1920, 1920);
@@ -23,6 +26,15 @@
       this.game.physics.p2.enable(player);
       this.cursors = this.game.input.keyboard.createCursorKeys();
       this.game.camera.follow(player);
+
+      this.scoreTable.addUser('test', '#123');
+      this.scoreTable.addUser('test2', '#321');
+
+      for(var i = 0; i < this.scoreTable.users.length; i++) {
+        var userText = this.game.add.text(10, i*30, this.scoreTable.users[i].name, { font: "24px Arial", fill: this.scoreTable.users[i].color, align: "left" });
+        userText.fixedToCamera = true;
+      }
+
     },
 
     update: function () {
@@ -41,9 +53,19 @@
     },
 
     onInputDown: function () {
-      this.game.state.start('menu');
+      this.game.state.start('gameover');
     }
   };
+
+  Game.prototype.scoreTable = {
+    users: [],
+    addUser: function(name, color) {
+      this.users.push({
+        name: name,
+        color: color
+      });
+    }
+  }
 
   window['tron'] = window['tron'] || {};
   window['tron'].Game = Game;
