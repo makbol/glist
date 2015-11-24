@@ -10,7 +10,7 @@ import pl.edu.agh.model.Player;
 public class TurnCommand extends BaseCommand {
 
     /** Nazwa komendy */
-    public static final String COMMAND_NAME = "getActiveUsersList";
+    public static final String COMMAND_NAME = "turnCommand";
 
     private String direction;
 

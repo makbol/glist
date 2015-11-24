@@ -53,8 +53,10 @@ public abstract class BaseCommand {
                 return (T) new GetActiveUsersListCommand(command);
             case StartNewGameCommand.COMMAND_NAME:
                 return (T) new StartNewGameCommand(command);
-             case KillServerCommand.COMMAND_NAME:
+            case KillServerCommand.COMMAND_NAME:
                 return (T) new KillServerCommand(command);
+            case TurnCommand.COMMAND_NAME:
+                return (T) new TurnCommand(command);
             default:
                 return (T) new HelloWorldCommand(command);
         }
