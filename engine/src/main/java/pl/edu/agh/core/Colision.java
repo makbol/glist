@@ -4,29 +4,23 @@ import pl.edu.agh.model.Board;
 
 public class Colision {
 
-	private int xMin;
-	private int yMin;
-	private int xMax;
-	private int yMax;
+    private int xMin = 0;
+    private int yMin = 0;
+    private int xMax;
+    private int yMax;
 
-	public Colision() {
-		xMin = 0;
-		yMin = 0;
-	}
+    public boolean detectBoundColision(Board board, int xPlayerPosition, int yPlayerPosition) {
+        xMax = board.getWidth();
+        yMax = board.getHeight();
 
-	public boolean detectBoundColision(Board board, int xPos, int yPos) {
-		//TODO nadpisac xMax i yMax
-//		xMax = board.getWidth();
-//		yMax = board.getHeight();
+        if (xPlayerPosition > xMax || xPlayerPosition < xMin || yPlayerPosition > yMax || yPlayerPosition < yMin) {
+            return true;
+        }
+        return false;
+    }
 
-		if (xPos > xMax || xPos < xMin || yPos > yMax || yPos < yMin) {
-			return true;
-		}
-		return false;
-	}
-
-	public boolean detectPlayerColision() {
-		// int value = board.tabBoard[xPos][yPos];
-		return false;
-	}
+    public boolean detectPlayerColision(Board board, int xPlayerPosition, int yPlayerPosition) {
+        int value = board.tabBoard[xPlayerPosition][yPlayerPosition];
+        return (value == 1) ? true : false;
+    }
 }
