@@ -2,6 +2,8 @@ package pl.edu.agh.model;
 
 import pl.edu.agh.util.BoardSizeException;
 
+import java.util.UUID;
+
 public class Board {
     private int timeofGame;
 
@@ -32,11 +34,11 @@ public class Board {
         }
     }
 
-    public void setPlayerPosition(int x, int y, int playerId) throws BoardSizeException {
+    public void setPlayerPosition(int x, int y, UUID playerId) throws BoardSizeException {
         if (x < 0 || x >= width || y < 0 || y >= height) {
             throw new BoardSizeException("Player position can't be at [" + x + ", " + y + "]. Get your sh*t together.");
         }
-        tabBoard[x][y] = (char)(playerId + 48);
+        tabBoard[x][y] = playerId.toString().charAt(0);
     }
 
     public int getHeight() {

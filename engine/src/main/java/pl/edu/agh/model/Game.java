@@ -17,6 +17,14 @@ public class Game implements Runnable {
         game.run();
     }
 
+    public Game() {
+
+    }
+
+    public Game(List<Player> playersList) {
+        this.playersList = playersList;
+    }
+
     public void run() {
         int width = 20;
         int height = 20;
@@ -27,7 +35,7 @@ public class Game implements Runnable {
         }
 
         for (int i = 1; i < 5; i++)
-            playersList.add(new Player(i));
+            playersList.add(new Player(String.valueOf(i)));
 
         Random random = new Random();
 
@@ -36,7 +44,7 @@ public class Game implements Runnable {
             p.setY(random.nextInt(height));
             try {
                 p.setDirection(Player.Direction.parse(random.nextInt(4)));
-                board.setPlayerPosition(p.getX(), p.getY(), p.getId());
+                board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
             } catch (EnumIdOutOfBoundsException | BoardSizeException e) {
                 e.printStackTrace();
             }
@@ -60,7 +68,7 @@ public class Game implements Runnable {
                             break;
                     }
                     try {
-                        board.setPlayerPosition(p.getX(), p.getY(), p.getId());
+                        board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
                     } catch (BoardSizeException e) {
                         e.printStackTrace();
                     }

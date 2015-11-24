@@ -1,5 +1,8 @@
 package pl.edu.agh.core;
 
+import pl.edu.agh.model.Game;
+import pl.edu.agh.model.Player;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

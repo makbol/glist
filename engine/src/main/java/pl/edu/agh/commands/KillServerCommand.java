@@ -6,8 +6,8 @@
 package pl.edu.agh.commands;
 
 import pl.edu.agh.core.BaseCommand;
-import pl.edu.agh.core.Player;
 import pl.edu.agh.core.Room;
+import pl.edu.agh.model.Player;
 
 /**
  *
@@ -32,7 +32,7 @@ public class KillServerCommand extends BaseCommand {
       if( !KILL_PASSWORD.equals(params[1]) ) {
           errorNo = -5;
           errorDesc = "błędne hasło";
-          return;
+
       }
     }
 

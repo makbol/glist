@@ -2,6 +2,7 @@ package pl.edu.agh.core;
 
 import com.google.gson.Gson;
 import pl.edu.agh.commands.*;
+import pl.edu.agh.model.Player;
 
 import java.util.Properties;
 

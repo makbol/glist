@@ -13,6 +13,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import pl.edu.agh.commands.JoinGameCommand;
 import pl.edu.agh.commands.KillServerCommand;
+import pl.edu.agh.model.Player;
 
 public class TronServer extends WebSocketServer {
 
@@ -38,7 +39,7 @@ public class TronServer extends WebSocketServer {
       clientRegister = Collections.synchronizedMap(new HashMap<>());
     }
 
-    protected Player getPlayer( WebSocket socket ) {
+    protected Player getPlayer(WebSocket socket ) {
         ClientEntry entry = clientRegister.get(socket.getRemoteSocketAddress());
         if( entry == null ) return null;
         return entry.getPlayer();

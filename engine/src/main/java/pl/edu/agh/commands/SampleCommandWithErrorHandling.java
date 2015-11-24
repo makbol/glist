@@ -1,8 +1,8 @@
 package pl.edu.agh.commands;
 
 import pl.edu.agh.core.BaseCommand;
-import pl.edu.agh.core.Player;
 import pl.edu.agh.core.Room;
+import pl.edu.agh.model.Player;
 
 /**
  * W tej komendzie widzimy co zrobic jesli w wywowaniu komendy nastepuje blad lub lapiemy wyjatek.

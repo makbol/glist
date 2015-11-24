@@ -2,7 +2,7 @@ package pl.edu.agh.commands;
 
 import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
-import pl.edu.agh.core.Player;
+import pl.edu.agh.model.Player;
 
 /**
  * Przykladowa komenda korzystajaca z parametrow. Parsuje ona parametry z konstruktora i zapisuje w odpowiednich polach.
