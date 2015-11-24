@@ -39,25 +39,27 @@ public abstract class BaseCommand {
     }
 
     /** Metoda zwraca odpowiednia implementacje komendy dla komendy w postaci stringa. */
-    public static BaseCommand getCommand(String[] command) {
+    public static < T extends BaseCommand > T getCommand(String[] command) {
         if(command.length < 1) {
             return null;
         }
         switch (command[0]) {
             case HelloWorldCommand.COMMAND_NAME:
-                return new HelloWorldCommand(command);
+                return (T) new HelloWorldCommand(command);
             case SampleCommandWithParam.COMMAND_NAME:
-                return new SampleCommandWithParam(command);
+                return (T) new SampleCommandWithParam(command);
             case SampleCommandWithErrorHandling.COMMAND_NAME:
-                return new SampleCommandWithErrorHandling(command);
+                return (T) new SampleCommandWithErrorHandling(command);
             case JoinGameCommand.COMMAND_NAME :
-                return new JoinGameCommand(command);
+                return (T) new JoinGameCommand(command);
             case GetActiveUsersListCommand.COMMAND_NAME:
-                return new GetActiveUsersListCommand(command);
+                return (T) new GetActiveUsersListCommand(command);
             case StartNewGameCommand.COMMAND_NAME:
-                return new StartNewGameCommand(command);
+                return (T) new StartNewGameCommand(command);
+             case KillServerCommand.COMMAND_NAME:
+                return (T) new KillServerCommand(command);
             default:
-                return new HelloWorldCommand(command);
+                return (T) new HelloWorldCommand(command);
         }
     }
 

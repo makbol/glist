@@ -12,6 +12,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import pl.edu.agh.commands.JoinGameCommand;
+import pl.edu.agh.commands.KillServerCommand;
 
 public class TronServer extends WebSocketServer {
 
@@ -55,6 +56,55 @@ public class TronServer extends WebSocketServer {
         clientRegister.remove(socket.getRemoteSocketAddress());
     }
     
+    protected BaseCommand handleKill( WebSocket socket, Player player, KillServerCommand command ) {
+        room.executeCommand(command, player);
+        if(command.wasSuccessful()) {
+            try {
+                stop(1000);
+            }catch(Exception e) {
+                throw new IllegalStateException("Unable to stop server",e);
+            }
+        } else {
+            socket.send(command.getErrorResponse());
+        }
+        return null;
+    }
+    protected BaseCommand handleJoin( WebSocket socket, Player player, JoinGameCommand command ) {
+       room.executeCommand(command, player);  
+       player = ((JoinGameCommand)command).getAddedPlayer();
+       if( command.wasSuccessful() ) {
+           acceptPlayer(player, socket);
+           socket.send(command.getResultResponse());
+       } else {
+           socket.send(command.getErrorResponse());
+       }
+       return null;
+    }
+    /**
+     * Obsługuje commendę
+     * @param socket socket przez który jest połączony gracz player
+     * @param player gracz kóry wykonuje polecenie
+     * @param command polecenie do wykonania
+     * @return komenda dowykonania przez serwer
+     */
+    protected BaseCommand handleCommand( WebSocket socket, Player player, BaseCommand command ) {
+        BaseCommand r =null;
+        switch(command.getCommandName()) {
+            case JoinGameCommand.COMMAND_NAME :
+                r = handleJoin(socket, player, (JoinGameCommand)command);
+                break;
+            case KillServerCommand.COMMAND_NAME :
+                r= handleKill(socket, player, (KillServerCommand)command);
+                break;
+        }
+        if( r == null ) return null;
+        if( player == null ) {
+            socket.send(BaseCommand.createNoPlayerResponse());
+            return null;
+        }
+        return command;
+    }
+    
     public Room getRoom() {
         return room;
     }
@@ -71,28 +121,19 @@ public class TronServer extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         try {
           String[] request = message.split(",");
-          BaseCommand command = BaseCommand.getCommand(request);
+          
           Player player = getPlayer(conn);
-          if( player == null ) {
-              if( command instanceof JoinGameCommand ) {
-                   room.executeCommand(command, player);  
-                   player = ((JoinGameCommand)command).getAddedPlayer();
-                   if( command.wasSuccessful() ) {
-                       acceptPlayer(player, conn);
-                   }
-              } else {
-                  conn.send(BaseCommand.createNoPlayerResponse());
-                  return;
-              }
-             
-          } else {
-              room.executeCommand(command, player);
-          }
-          if( command.wasSuccessful() ) {
+          BaseCommand command = handleCommand(conn, player, BaseCommand.getCommand(request));
+          if( command != null ) {
+            room.executeCommand(command, player);
+            if( command.wasSuccessful() ) {
               conn.send(command.getResultResponse());
-          } else {
-              conn.send(command.getErrorResponse());
+            } else {
+                conn.send(command.getErrorResponse());
+            }
           }
+
+         
         }catch(Exception npe) {
             npe.printStackTrace();
         }
@@ -107,11 +148,18 @@ public class TronServer extends WebSocketServer {
                 excptn);
       } else {
           Player p = getPlayer(ws);
+          if( p == null ) {
+              l.warn(new StringBuilder("Player: ")
+                    .append(" expeirenced problem")
+                    .toString(),
+                excptn);
+          } else {
           l.warn(new StringBuilder("Player: ")
                     .append(p.getUsername())
                     .append(" expeirenced problem")
                     .toString(),
                 excptn);
+          }
       }
        }catch(Exception e) {
            e.printStackTrace();
