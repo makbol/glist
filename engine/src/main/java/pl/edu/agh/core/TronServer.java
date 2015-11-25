@@ -188,12 +188,11 @@ public class TronServer extends WebSocketServer {
           l.warn(()-> {
                Player p = getPlayer(ws);
                if( p == null ) {
-                   return Log.message("Guest expiriened problem",excptn);
+                   return Log.message("Guest expiriened problem");
                } else {
-                   excptn.printStackTrace();
-                   return Log.message("Player %s expeirenced problem: "+excptn+" "+p.toDebugString(),excptn, p.getUserId());
+                   return Log.message("Player {} expeirenced problem: ",p.toDebugString());
                }
-          });
+          },excptn);
           
       }
     }
