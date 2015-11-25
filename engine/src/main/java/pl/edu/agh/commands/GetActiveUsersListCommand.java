@@ -26,7 +26,7 @@ public class GetActiveUsersListCommand extends BaseCommand {
         List<Player> players = room.getPlayers();
         List<Player> activePlayers = new ArrayList<>();
         for(Player player1 : players) {
-            if(player1.getTimeOfDeath() != null) {
+            if(player1.getTimeOfDeath() == null) {
                 activePlayers.add(player1);
             }
         }

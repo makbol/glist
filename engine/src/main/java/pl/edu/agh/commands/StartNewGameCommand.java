@@ -28,6 +28,7 @@ public class StartNewGameCommand extends BroadcastCommand {
         room.startNewGame();
         cmd = new GetActiveUsersListCommand(new String[]{GetActiveUsersListCommand.COMMAND_NAME});
         cmd.execute(room, player);
+        result = cmd.getResult();
     }
 
     @Override
@@ -37,7 +38,7 @@ public class StartNewGameCommand extends BroadcastCommand {
 
     @Override
     protected String getResponseFor(Player p) {
-        return cmd.getResultResponse();
+        return accessResultResponse();
     }
 
     

@@ -46,6 +46,7 @@ public class TronServer extends WebSocketServer {
       commandHandlers = new ArrayList();
       commandHandlers.add(this::onJoinExecuted);
       commandHandlers.add(this::onKillExecuted);
+      commandHandlers.add(this::onBroadcastExecuted);
       room = createRoom();
     }
     private Room createRoom() {
@@ -189,7 +190,8 @@ public class TronServer extends WebSocketServer {
                if( p == null ) {
                    return Log.message("Guest expiriened problem",excptn);
                } else {
-                   return Log.message("Player %s expeirenced problem",excptn, p.getUserId());
+                   excptn.printStackTrace();
+                   return Log.message("Player %s expeirenced problem: "+excptn+" "+p.toDebugString(),excptn, p.getUserId());
                }
           });
           

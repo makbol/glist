@@ -50,7 +50,7 @@ public class Player implements Serializable {
      * - w momencie smierci jest ustawiana na obecny tick gry
      **/
     @Expose
-    private Integer timeOfDeath;
+    private Integer timeOfDeath = null;
 
     /**
      * Data wywloania ostatniej komendy

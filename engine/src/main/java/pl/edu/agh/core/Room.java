@@ -51,7 +51,11 @@ public class Room {
     }
 
     public void addPlayer(Player player) {
-        this.players.add(player);
+        if( player == null ) {
+            throw new NullPointerException("player must be not null");
+        } else {
+            this.players.add(player);
+        }
     }
 
     public long getRoomNo() {

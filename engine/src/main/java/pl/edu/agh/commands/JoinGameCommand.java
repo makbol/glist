@@ -29,7 +29,7 @@ public class JoinGameCommand extends BaseCommand {
         }
 
         addedPlayer = new Player(params[1]);
-        room.addPlayer(player);
+        room.addPlayer(addedPlayer);
         result = addedPlayer.getUserId().toString();
     }
 
