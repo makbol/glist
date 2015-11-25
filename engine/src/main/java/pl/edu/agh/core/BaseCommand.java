@@ -10,7 +10,7 @@ import java.util.Properties;
  * Szablon komendy.
  */
 public abstract class BaseCommand {
-
+    
     /** Nazwa parametru wynikowego zawierajacego nazwe komendy. */
     public static final String COMMAND_NAME_PARAM = "commandName";
 
@@ -62,10 +62,25 @@ public abstract class BaseCommand {
         }
     }
 
-    public static String createNoPlayerResponse() {
+    public static String createNoPlayerResponse( String command ) {
         Properties result = new Properties();
+        result.put(COMMAND_NAME_PARAM, command); 
         result.put(COMMAND_ERROR_CODE_PARAM, -69);
         result.put(COMMAND_ERROR_DESC_PARAM, "Wykonaj joinGame najpierw!");
+        return new Gson().toJson(result);
+    }
+    public static String createRoomConsumed( String command ) {
+        Properties result = new Properties();
+        result.put(COMMAND_NAME_PARAM, command); 
+        result.put(COMMAND_ERROR_CODE_PARAM, -8);
+        result.put(COMMAND_ERROR_DESC_PARAM, "Pokój odmówił wykonania komendy");
+        return new Gson().toJson(result);
+    }
+    public static String createNoSuchCommand( String command ) {
+        Properties result = new Properties();
+        result.put(COMMAND_NAME_PARAM, command); 
+        result.put(COMMAND_ERROR_CODE_PARAM, -7);
+        result.put(COMMAND_ERROR_DESC_PARAM, "Nieznana kodmenda");
         return new Gson().toJson(result);
     }
     
@@ -97,6 +112,7 @@ public abstract class BaseCommand {
             throw new IllegalStateException(" Command did not fail. There is no error ");
         }
          Properties result = new Properties();
+        result.put(COMMAND_NAME_PARAM, getCommandName()); 
         result.put(COMMAND_ERROR_CODE_PARAM, errorNo);
         result.put(COMMAND_ERROR_DESC_PARAM, errorDesc);
         return new Gson().toJson(result);

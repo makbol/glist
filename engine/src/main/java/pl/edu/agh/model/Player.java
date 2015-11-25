@@ -178,4 +178,18 @@ public class Player implements Serializable {
             }
         }
     }
+    
+    public String toString() {
+        return username;
+    }
+    
+    public String toDebugString() {
+        return new StringBuilder(username)
+               .append("(")
+               .append(color)
+               .append(",")
+               .append(userId.toString())
+               .append(")")
+               .toString();
+    }
 }
