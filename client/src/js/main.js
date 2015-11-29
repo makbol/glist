@@ -12,14 +12,16 @@ var playersList =  [{
     'v_x' : 5,
     'v_y' : 5,
     'color' : 'red',
-    'id' : 1000
+    'id' : 1000,
+    'userName' : 'Player1'
   }, {
     'x' : 800,
     'y' : 800,
     'v_x' : 2,
     'v_y' : 2,
-    'color' : 'red',
-    'id' : 1100
+    'color' : 'yellow',
+    'id' : 1100,
+    'userName' : 'Player2'
   }]
 
 function makeid()
@@ -80,6 +82,8 @@ window.addEventListener('load', function () {
   game.state.add('preloader', ns.Preloader);
   game.state.add('menu', ns.Menu);
   game.state.add('game', ns.Game);
+  game.state.add('gameover', ns.Gameover);
+  console.log(ns.Gameover);
   /* yo phaser:state new-state-files-put-here */
   game.state.start('boot');
   initiateWebSocketConnection();

@@ -1,5 +1,8 @@
 package pl.edu.agh.core;
 
+import pl.edu.agh.model.Game;
+import pl.edu.agh.model.Player;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +51,11 @@ public class Room {
     }
 
     public void addPlayer(Player player) {
-        this.players.add(player);
+        if( player == null ) {
+            throw new NullPointerException("player must be not null");
+        } else {
+            this.players.add(player);
+        }
     }
 
     public long getRoomNo() {
