@@ -4,7 +4,7 @@
   var playerToIdMap = {}
 
   var getDistance = function(x1, y1, x2, y2) {
-    return Math.sqrt( Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2) );
+    return Math.sqrt( Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2) );
   }
 
   function Game() {}
@@ -23,8 +23,7 @@
       this.cursors = this.game.input.keyboard.createCursorKeys();
       this.game.camera.follow(player);
 
-      for (var tmpPlayer in playersList) {
-        var tmpPlayerObject = playersList[tmpPlayer];
+      playersList.forEach(function (tmpPlayerObject){
         playerToIdMap[tmpPlayerObject.id] = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'player');
         this.game.physics.p2.enable(playerToIdMap[tmpPlayerObject.id]);
         this.scoreTable.addUser(tmpPlayerObject.userName, tmpPlayerObject.color);
@@ -58,18 +57,18 @@
                    'v_x' : player.body.velocity.x, 
                    'v_y' : player.body.velocity.y } );
       }
-      for (var tmpPlayer in playersList) {
-        var tmpPlayerObject = playersList[tmpPlayer];
 
-        playerToIdMap[tmpPlayerObject.id].body.velocity.x = playersList[tmpPlayer].v_x;
-        playerToIdMap[tmpPlayerObject.id].body.velocity.y = playersList[tmpPlayer].v_y;
+      playersList.forEach(function (tmpPlayer){
+        var playerObject = playerToIdMap[tmpPlayer.id];
+        playerObject.body.velocity.x = tmpPlayer.v_x;
+        playerObject.body.velocity.y = tmpPlayer.v_y;
         
-        if (getDistance(playerToIdMap[tmpPlayerObject.id].body.x, playerToIdMap[tmpPlayerObject.id].body.y,
-                        playersList[tmpPlayer].x, playersList[tmpPlayer].y) > 10) {
-          playerToIdMap[tmpPlayerObject.id].body.x = playersList[tmpPlayer].x;
-          playerToIdMap[tmpPlayerObject.id].body.y = playersList[tmpPlayer].y;
+        if (getDistance(playerObject.body.x, playerObject.body.y, tmpPlayer.x, tmpPlayer.y) > 10) {
+          playerObject.body.x = tmpPlayer.x;
+          playerObject.body.y = tmpPlayer.y;
         }
-      }
+
+      });
     },
 
     onInputDown: function () {

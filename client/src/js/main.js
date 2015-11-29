@@ -22,7 +22,7 @@ var playersList =  [{
     'color' : 'yellow',
     'id' : 1100,
     'userName' : 'Player2'
-  }]
+  }];
 
 function makeid()
 {
