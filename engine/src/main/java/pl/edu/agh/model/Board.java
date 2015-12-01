@@ -53,11 +53,10 @@ public class Board {
                     throw new BoardSizeException("Board size exeeded");
                 }
 		if (colision.detectColision(this, x, y)) {
-			Player player = null; // players.get(playerId);
-			if (player != null) {
-				int timeOfDeath = player.getTimeOfDeath();
-				player.updateScore(timeOfDeath);
-			}
+			Player player = players.get(playerId);
+
+			int timeOfDeath = player.getTimeOfDeath();
+			player.updateScore(timeOfDeath);
 			System.out.println("KOLIZJA");
 
 		} else {
