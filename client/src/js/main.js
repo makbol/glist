@@ -61,9 +61,7 @@ window.addEventListener('load', function () {
                   game.state.start('game');
       			      break;
       			    case "UPDATE":
-                  console.log(received_msg.result)
-                  playersList = JSON.parse(received_msg.result);
-                  // alert(playersList)
+                  playersList = received_msg.result;
                   break;
       			    case "GAME_OVER":
       			    	break;
