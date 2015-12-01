@@ -8,6 +8,7 @@ import pl.edu.agh.util.EnumIdOutOfBoundsException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+import pl.edu.agh.util.ColorRandom;
 
 public class Player implements Serializable {
     private static final double POINTS_PER_FRAME = 0.1666667;
@@ -67,12 +68,31 @@ public class Player implements Serializable {
      * Kierunek w ktorym porusza sie gracz
      */
     @Expose
-    private Direction direction;
+    private Direction direction = Direction.W;
 
     public Player(String username) {
         this.username = username;
+        color = new ColorRandom().nextColor();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if( this == o ) return true;
+        if( o instanceof Player ) {
+            Player p = (Player)o;
+            return p.userId.equals(userId);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return userId.hashCode();
+    }
+
+    
+    
+    
     public UUID getUserId() {
         return userId;
     }

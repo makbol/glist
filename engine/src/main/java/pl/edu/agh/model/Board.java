@@ -39,6 +39,9 @@ public class Board {
 	}
 
 	public void setPlayerPosition(int x, int y, UUID playerId) throws BoardSizeException {
+                if( x < 0 || y < 0 || x >= width || y >= height ) {
+                    throw new BoardSizeException("Board size exeeded");
+                }
 		if (colision.detectColision(this, x, y)) {
 			Player player = null;
 			// int timeOfDeath = player.getTimeOfDeath();

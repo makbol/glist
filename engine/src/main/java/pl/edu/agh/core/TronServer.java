@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import javax.crypto.SealedObject;
 import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
@@ -18,6 +19,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import pl.edu.agh.commands.JoinGameCommand;
 import pl.edu.agh.commands.KillServerCommand;
+import pl.edu.agh.commands.StartNewGameCommand;
 import pl.edu.agh.model.Player;
 
 public class TronServer extends WebSocketServer {
@@ -38,15 +40,20 @@ public class TronServer extends WebSocketServer {
 
     private Room room;
     private final Map<InetSocketAddress,ClientEntry> clientRegister;
+    private final Map<Player,ClientEntry> sockets;
     private final List<ICommandExecutedHandler> commandHandlers;
+    private final ServerGameEventHandler gameHandler;
 
     private TronServer( int port ) throws IOException {
       super(new InetSocketAddress(port));
       clientRegister = Collections.synchronizedMap(new HashMap<>());
+      sockets = new HashMap<>();
       commandHandlers = new ArrayList();
+      commandHandlers.add(this::onBroadcastExecuted);
       commandHandlers.add(this::onJoinExecuted);
       commandHandlers.add(this::onKillExecuted);
-      commandHandlers.add(this::onBroadcastExecuted);
+      commandHandlers.add(this::onStartNewGameExecuted);
+      gameHandler = new ServerGameEventHandler(this);
       room = createRoom();
     }
     private Room createRoom() {
@@ -59,11 +66,21 @@ public class TronServer extends WebSocketServer {
         if( entry == null ) return null;
         return entry.getPlayer();
     }
+    protected WebSocket getPlayerSocket( Player p ) {
+        ClientEntry ce =  sockets.get(p);
+        if( ce == null ) {
+            l.warn("getPlayerSocket for nonexisting player");
+            return null;
+        }
+        return ce.socket;
+    }
     protected void acceptPlayer( Player player, WebSocket socket ) {
         l.debug(()->{
             return Log.message("player accepted: %s", player.toDebugString());
         });
-        clientRegister.put(socket.getRemoteSocketAddress(), new ClientEntry(player, socket));
+        ClientEntry entry = new ClientEntry(player, socket);
+        clientRegister.put(socket.getRemoteSocketAddress(), entry);
+        sockets.put(player, entry);
     }
     protected void forgetPlayer( WebSocket  socket ) {
         l.debug(()->{ 
@@ -71,7 +88,9 @@ public class TronServer extends WebSocketServer {
                                 getPlayer(socket)
                                         .toDebugString());
         });
-        clientRegister.remove(socket.getRemoteSocketAddress());
+        ClientEntry e = clientRegister.remove(socket.getRemoteSocketAddress());
+        sockets.remove(e.player);
+        room.playerLeft(e.player);
     }
     
     protected void brodcastMessage( String message ) {
@@ -106,6 +125,18 @@ public class TronServer extends WebSocketServer {
             return true;
        }
        return false;
+    }
+    protected boolean onStartNewGameExecuted( WebSocket socket, Player player, BaseCommand command ) {
+        if( command instanceof StartNewGameCommand ) {
+            try{
+                room.startNewGame(gameHandler);
+            }catch(IllegalStateException ie) {
+                command.errorNo = -66;
+                command.errorDesc = "Game already running";
+            }
+            return true;
+        }
+        return false;
     }
     protected boolean onJoinExecuted( WebSocket socket, Player player, BaseCommand command ) {
        if( command instanceof JoinGameCommand ) {
@@ -148,6 +179,20 @@ public class TronServer extends WebSocketServer {
         return room;
     }
 
+    public void invokeForPlayer( Player player, BaseCommand command ) {
+        WebSocket socket = getPlayerSocket(player);
+        
+        if( socket == null ) return;
+        
+        command = room.executeCommand(command, player);
+        if( command != null ) {
+            String message = onCommandExecuted(socket, player, command);
+            if( message != null ) {
+                socket.send(message);
+            }
+        }
+    }
+    
     @Override
     public void onOpen(WebSocket ws, ClientHandshake ch) {
         ws.send(new StringBuilder("Welcome to TronServer(")

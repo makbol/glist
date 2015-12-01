@@ -18,6 +18,7 @@ public class StartNewGameCommand extends BroadcastCommand {
     public static final String COMMAND_NAME = "startNewGame";
     
     private GetActiveUsersListCommand cmd;
+    private Player executor;
 
     public StartNewGameCommand(String[] params) {
         super(params);
@@ -25,10 +26,11 @@ public class StartNewGameCommand extends BroadcastCommand {
 
     @Override
     protected void execute(Room room, Player player) {
-        room.startNewGame();
-        cmd = new GetActiveUsersListCommand(new String[]{GetActiveUsersListCommand.COMMAND_NAME});
-        cmd.execute(room, player);
-        result = cmd.getResult();
+        executor = player;
+        if( room.isGameRunning() ) {
+          errorNo = -66;
+          errorDesc = "Game is running";
+        } 
     }
 
     @Override
@@ -38,7 +40,11 @@ public class StartNewGameCommand extends BroadcastCommand {
 
     @Override
     protected String getResponseFor(Player p) {
-        return accessResultResponse();
+        if( p.equals(executor) ) {
+            return "You stared the game";
+        } else {
+            return p.getUsername()+" started the game";
+        }
     }
 
     

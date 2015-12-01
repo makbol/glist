@@ -6,6 +6,7 @@ import pl.edu.agh.model.Player;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import pl.edu.agh.model.IGameEventHandler;
 
 /**
  * Klasa pokoju na serwerze.
@@ -24,10 +25,35 @@ public class Room {
     /** Gra jesli jest rozpoczeta. */
     private Game game = null;
 
-    public void startNewGame() {
+    /** Wątek przetwarzajacy logikę gry.  */
+    private Thread gameWorker;
+    
+    public void startNewGame(IGameEventHandler geh) {
+        
+        if( isGameRunning() ) {
+            System.out.println("Game alredy running");
+            throw new IllegalStateException("Game already running");
+        }
+        
         game = new Game(players);
+        game.setEventHandler(geh);
+        gameWorker = new Thread(game);
+        gameWorker.setName("GameWorker");
+        gameWorker.setDaemon(true);
+        gameWorker.start();
+    }
+    
+    public boolean isGameRunning() {
+        return game!=null && gameWorker.isAlive();
     }
 
+    public void registerGameEventHandler( IGameEventHandler gevh ) {
+        if( game != null ) {
+            game.setEventHandler(gevh);
+        }
+        throw new IllegalStateException("No game in room");
+    }
+    
     /**
      * Wywolanie komendy w danym pokoju. Logika zalezna od komendy.
      * @param command komenda do wylowania
@@ -58,6 +84,13 @@ public class Room {
         }
     }
 
+    public void playerLeft( Player p ) {
+        players.remove(p);
+        if( game != null ) {
+            game.playerLeft(p);
+        }
+    }
+    
     public long getRoomNo() {
         return roomNo;
     }
@@ -65,4 +98,10 @@ public class Room {
     public Game getGame() {
         return game;
     }
+    
+    public void endGame() {
+        gameWorker.interrupt();
+        game = null;
+    }
+    
 }
