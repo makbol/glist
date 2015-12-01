@@ -1,6 +1,8 @@
 package pl.edu.agh.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import pl.edu.agh.core.Colision;
@@ -14,8 +16,16 @@ public class Board {
 	private Colision colision;
 	public char[][] tabBoard;
 
+	private final Map<UUID, Player> players;
+
 	public Board(int width, int height, List<Player> playerList) throws BoardSizeException {
 		super();
+
+		players = new HashMap<>();
+		for (Player player : playerList) {
+			players.put(player.getUserId(), player);
+		}
+
 		colision = new Colision();
 		if (width > 1 && height > 1) {
 			this.width = width;
@@ -43,8 +53,10 @@ public class Board {
                     throw new BoardSizeException("Board size exeeded");
                 }
 		if (colision.detectColision(this, x, y)) {
-			Player player = null;
-			// int timeOfDeath = player.getTimeOfDeath();
+			Player player = players.get(playerId);
+
+			int timeOfDeath = player.getTimeOfDeath();
+			player.updateScore(timeOfDeath);
 			System.out.println("KOLIZJA");
 
 		} else {

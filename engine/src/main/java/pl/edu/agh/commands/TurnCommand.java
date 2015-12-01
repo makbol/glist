@@ -1,5 +1,6 @@
 package pl.edu.agh.commands;
 
+import java.util.Arrays;
 import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
 import pl.edu.agh.model.Player;
@@ -21,6 +22,7 @@ public class TurnCommand extends BaseCommand {
 
     @Override
     protected void execute(Room room, Player player) {
+        System.out.println("turnCommand: "+Arrays.toString(params));
         player.setDirection(Player.Direction.parse(direction));
     }
 

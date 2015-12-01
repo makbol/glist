@@ -8,7 +8,7 @@ package pl.edu.agh.core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.agh.commands.ForfitCommand;
-import pl.edu.agh.commands.SyncCommand;
+import pl.edu.agh.commands.UpdateCommand;
 import pl.edu.agh.model.GameEvent;
 import pl.edu.agh.model.IGameEventHandler;
 import pl.edu.agh.model.PlayerGameEvent;
@@ -30,7 +30,7 @@ public class ServerGameEventHandler implements IGameEventHandler {
 
     protected BaseCommand createCommandForEvent( GameEvent ge ) {
         if( ge instanceof PlayerPositionChangedEvent ) {
-            return new SyncCommand();
+            return new UpdateCommand();
         }
         if( ge instanceof PlayerDiedEvent ) {
             return new ForfitCommand();
@@ -48,7 +48,7 @@ public class ServerGameEventHandler implements IGameEventHandler {
            }
        }
        if( e instanceof GameEndEvent ) {
-           server.brodcastMessage("The GAME ended!");
+//           server.brodcastMessage("The GAME ended!");
        }
     }
     

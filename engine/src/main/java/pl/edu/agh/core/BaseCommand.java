@@ -1,6 +1,7 @@
 package pl.edu.agh.core;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import pl.edu.agh.commands.*;
 import pl.edu.agh.model.Player;
 
@@ -33,7 +34,7 @@ public abstract class BaseCommand {
     protected String errorDesc = "";
 
     /** Resultat wywolania komendy. Domyslnie null - czyli brak rezultatu. */
-    protected String result = null;
+    protected String result = "";
 
     public BaseCommand(String[] params) {
         this.params = params;
@@ -104,8 +105,9 @@ public abstract class BaseCommand {
         }
         Properties result = new Properties();
         result.put(COMMAND_NAME_PARAM, getCommandName());
-        result.put(RESULT_PARAM, this.result);
-        return new Gson().toJson(result);
+        result.put(RESULT_PARAM, this.result.replace("\"","'"));
+        
+        return new GsonBuilder().disableHtmlEscaping().create().toJson(result);
     }
     public String getErrorResponse() {
         if( wasSuccessful() ) {
@@ -115,7 +117,7 @@ public abstract class BaseCommand {
         result.put(COMMAND_NAME_PARAM, getCommandName()); 
         result.put(COMMAND_ERROR_CODE_PARAM, errorNo);
         result.put(COMMAND_ERROR_DESC_PARAM, errorDesc);
-        return new Gson().toJson(result);
+        return new Gson().toJson(result).replace("\"","'");
     }
     
     
