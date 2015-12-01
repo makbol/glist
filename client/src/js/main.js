@@ -50,21 +50,29 @@ window.addEventListener('load', function () {
             ws.send("joinGame," + id);
          };
          
-         ws.onmessage = function (evt) { 
-            var received_msg = JSON.parse(evt.data);
-            switch (received_msg.commandName) {
-  			    case "joinGame":
-              playerId = received_msg.result;
-              break;
-            case "START":
-              game.state.start('game');
-  			      break;
-  			    case "UPDATE":
-              playersList = received_msg.data;
-  			      break;
-  			    case "GAME_OVER":
-  			    	break;
-			     }
+         ws.onmessage = function (evt) {
+            console.log(evt.data)
+            try {
+              var received_msg = JSON.parse(evt.data);
+              switch (received_msg.commandName) {
+      			    case "joinGame":
+                  playerId = received_msg.result;
+                  break;
+                case "startNewGame":
+                  game.state.start('game');
+      			      break;
+      			    case "UPDATE":
+                  console.log(playersList)
+                  playersList = JSON.parse(received_msg.result);
+                  console.log(received_msg.result)
+      			      console.log(playersList)
+                  break;
+      			    case "GAME_OVER":
+      			    	break;
+              }
+			     } catch(err) {
+              console.warn(err)
+           }
          };
   
          ws.onclose = function() { 
