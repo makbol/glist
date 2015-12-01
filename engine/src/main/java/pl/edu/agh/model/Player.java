@@ -45,6 +45,12 @@ public class Player implements Serializable {
     @Expose
     private int y;
 
+    @Expose
+    private int vx;
+
+    @Expose
+    private int vy;
+
     /**
      * Numer ticka w którm gracz zginal
      * - dopoki gracz zyje, referencja jest nullem
@@ -143,6 +149,26 @@ public class Player implements Serializable {
 
     public void setTimeOfDeath(Integer timeOfDeath) {
         this.timeOfDeath = timeOfDeath;
+    }
+
+    public int getVx() {
+        return vx;
+    }
+
+    public void setVx(int vx) {
+        this.vx = vx;
+    }
+
+    public int getVy() {
+        return vy;
+    }
+
+    public void setVy(int vy) {
+        this.vy = vy;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public Date getLastCommandDate() {
