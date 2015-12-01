@@ -107,7 +107,7 @@ public abstract class BaseCommand {
         result.put(COMMAND_NAME_PARAM, getCommandName());
         result.put(RESULT_PARAM, this.result.replace("\"","'"));
         
-        return new GsonBuilder().disableHtmlEscaping().create().toJson(result);
+        return new GsonBuilder().disableHtmlEscaping().create().toJson(result).replace("\"","'");
     }
     public String getErrorResponse() {
         if( wasSuccessful() ) {
