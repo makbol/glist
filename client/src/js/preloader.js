@@ -20,6 +20,9 @@
     loadResources: function () {
         this.game.load.image('background','assets/grass1.png');
         this.game.load.image('player','assets/ufo.png');
+		this.game.load.atlas('button_menu_start', 'assets/buttons/start.png', 'assets/buttons/start.json');
+		this.game.load.atlas('button_menu_results', 'assets/buttons/results.png', 'assets/buttons/results.json');
+		this.game.load.atlas('button_menu_exit', 'assets/buttons/exit.png', 'assets/buttons/exit.json');
     },
 
     create: function () {

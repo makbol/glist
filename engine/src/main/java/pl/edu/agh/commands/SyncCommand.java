@@ -5,6 +5,8 @@
  */
 package pl.edu.agh.commands;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
 import pl.edu.agh.model.Player;
@@ -13,32 +15,27 @@ import pl.edu.agh.model.Player;
  *
  * @author uriel
  */
-public class KillServerCommand extends BaseCommand {
+public class SyncCommand extends BaseCommand {
 
-    public static final String COMMAND_NAME = "kill";
-    private static final String KILL_PASSWORD = "die"; 
-    
-    public KillServerCommand(String[] params) {
+    private static final String COMMAND_NAME = "sync";
+
+    public SyncCommand() {
+        super(new String[]{COMMAND_NAME});
+    }    
+    public SyncCommand(String[] params) {
         super(params);
     }
-    
+
     @Override
     protected void execute(Room room, Player player) {
-      if( params.length < 2 || params[1].isEmpty()  ) {
-          errorNo = -2;
-          errorDesc = "Wymagane jest hasło";
-          return;
-      }
-      if( !KILL_PASSWORD.equals(params[1]) ) {
-          errorNo = -5;
-          errorDesc = "błędne hasło";
-
-      }
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        result = gson.toJson(player);
     }
 
     @Override
     public String getCommandName() {
         return COMMAND_NAME;
     }
+    
     
 }

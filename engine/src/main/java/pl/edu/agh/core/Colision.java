@@ -8,19 +8,16 @@ public class Colision {
     private int yMin = 0;
     private int xMax;
     private int yMax;
-
-    public boolean detectBoundColision(Board board, int xPlayerPosition, int yPlayerPosition) {
+    
+    public boolean detectColision(Board board, int xPlayerPosition, int yPlayerPosition) {
         xMax = board.getWidth();
         yMax = board.getHeight();
 
-        if (xPlayerPosition > xMax || xPlayerPosition < xMin || yPlayerPosition > yMax || yPlayerPosition < yMin) {
+        if (xPlayerPosition >= xMax || xPlayerPosition < xMin || yPlayerPosition >= yMax || yPlayerPosition < yMin) {
             return true;
         }
-        return false;
+        int value = board.tabBoard[xPlayerPosition][yPlayerPosition];
+        return (value > 1) ? true : false;
     }
 
-    public boolean detectPlayerColision(Board board, int xPlayerPosition, int yPlayerPosition) {
-        int value = board.tabBoard[xPlayerPosition][yPlayerPosition];
-        return (value == 1) ? true : false;
-    }
 }

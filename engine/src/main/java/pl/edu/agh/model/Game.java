@@ -6,28 +6,58 @@ import pl.edu.agh.util.EnumIdOutOfBoundsException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import pl.edu.agh.model.game.event.GameEndEvent;
+import pl.edu.agh.model.game.event.PlayerDiedEvent;
+import pl.edu.agh.model.game.event.PlayerPositionChangedEvent;
 
 public class Game implements Runnable {
     private Board board;
-    private List<Player> playersList;
+    private IGameEventHandler eventHandler;
+    private final List<Player> playersList;
+    /**
+     *  Częstotliwość przetwarzania pętli głównej gry wyrażona w liczbie
+     *  pętli na sekunde
+     */
+    private int frequency = 1;
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.playersList = new ArrayList<>();
         game.run();
+    }
+
+    public Game() {
+       playersList = new ArrayList<>();
+    }
+
+    public void setEventHandler(IGameEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    public IGameEventHandler getEventHandler() {
+        return eventHandler;
+    }
+    
+    public void onPlayerDied( Player p ) {
+        p.setTimeOfDeath(0);
+        synchronized(playersList) {
+            playersList.remove(p);
+        }
+        firePlayerDied(p);
+    }
+    
+    
+    public Game(List<Player> playersList) {
+        this.playersList = playersList;
     }
 
     public void run() {
         int width = 20;
         int height = 20;
         try {
-            board = new Board(width, height);
+            board = new Board(width, height, playersList);
         } catch (BoardSizeException e) {
             e.printStackTrace();
         }
-
-        for (int i = 1; i < 5; i++)
-            playersList.add(new Player(i));
 
         Random random = new Random();
 
@@ -36,15 +66,26 @@ public class Game implements Runnable {
             p.setY(random.nextInt(height));
             try {
                 p.setDirection(Player.Direction.parse(random.nextInt(4)));
-                board.setPlayerPosition(p.getX(), p.getY(), p.getId());
+                board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
             } catch (EnumIdOutOfBoundsException | BoardSizeException e) {
                 e.printStackTrace();
             }
+            firePlayerPositionChanged(p, p.getX(), p.getY());
         }
 
-        while (true) {
+        while (!Thread.interrupted()) {
             try {
-                for (Player p : playersList) {
+                List<Player> currentPlayers = null;
+                
+                synchronized(playersList) {
+                    currentPlayers = new ArrayList<>(playersList);
+                }
+                
+                if( currentPlayers.size() < 2 ) {
+                    break;
+                }
+                
+                for (Player p : currentPlayers) {
                     switch (p.getDirection()) {
                         case N:
                             p.setY(p.getY() + 1);
@@ -60,21 +101,42 @@ public class Game implements Runnable {
                             break;
                     }
                     try {
-                        board.setPlayerPosition(p.getX(), p.getY(), p.getId());
+                        board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
+                        firePlayerPositionChanged(p, p.getX(), p.getY());
                     } catch (BoardSizeException e) {
-                        e.printStackTrace();
+                        onPlayerDied(p);
                     }
                 }
-                board.drawBoard();
+//                board.drawBoard();
 
-                Thread.sleep(500);
+                Thread.sleep(1000/frequency);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        
+        fireGameEvent(new GameEndEvent());
     }
 
+    public void playerLeft( Player p ) {
+        synchronized(playersList) {
+            playersList.remove(p);
+        }
+    }
+    
+    
     public void calculateGameTick() {
 
     }
+    
+    protected void fireGameEvent(GameEvent g) {
+        if( eventHandler != null ) eventHandler.handleEvent(g);
+    }
+    protected void firePlayerPositionChanged(Player p,int x,int y) {
+        fireGameEvent(new PlayerPositionChangedEvent(p, x, y));
+    }
+    protected void firePlayerDied(Player p) {
+        fireGameEvent(new PlayerDiedEvent(p));
+    }
+    
 }
