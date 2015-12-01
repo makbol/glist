@@ -51,11 +51,11 @@
       }
 
       if(ws.readyState != 0) {
-        ws.send( {'id' : playerId, 
-                   'x' : player.body.x, 
-                   'y' : player.body.y,  
-                   'v_x' : player.body.velocity.x, 
-                   'v_y' : player.body.velocity.y } );
+        // ws.send( {'id' : playerId, 
+        //            'x' : player.body.x, 
+        //            'y' : player.body.y,  
+        //            'v_x' : player.body.velocity.x, 
+        //            'v_y' : player.body.velocity.y } );
       }
 
       playersList.forEach(function (tmpPlayer){
