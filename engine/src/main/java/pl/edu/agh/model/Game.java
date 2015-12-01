@@ -66,6 +66,17 @@ public class Game implements Runnable {
             p.setY(random.nextInt(height));
             try {
                 p.setDirection(Player.Direction.parse(random.nextInt(4)));
+                p.setVx(0);
+                p.setVy(0);
+                if(p.getDirection() == Player.Direction.N) {
+                    p.setVy(100);
+                } else if(p.getDirection() == Player.Direction.S) {
+                    p.setVy(-100);
+                } else if(p.getDirection() == Player.Direction.E) {
+                    p.setVx(100);
+                } else if(p.getDirection() == Player.Direction.W) {
+                    p.setVx(-100);
+                }
                 board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
             } catch (EnumIdOutOfBoundsException | BoardSizeException e) {
                 e.printStackTrace();
