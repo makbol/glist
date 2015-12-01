@@ -59,7 +59,7 @@ public abstract class BaseCommand {
             case TurnCommand.COMMAND_NAME:
                 return (T) new TurnCommand(command);
             default:
-                return (T) new HelloWorldCommand(command);
+                return null;
         }
     }
 
@@ -107,7 +107,7 @@ public abstract class BaseCommand {
         result.put(COMMAND_NAME_PARAM, getCommandName());
         result.put(RESULT_PARAM, this.result.replace("\"","'"));
         
-        return new GsonBuilder().disableHtmlEscaping().create().toJson(result);
+        return new GsonBuilder().disableHtmlEscaping().create().toJson(result).replace("\"","'");
     }
     public String getErrorResponse() {
         if( wasSuccessful() ) {

@@ -84,11 +84,7 @@ public class TronServer extends WebSocketServer {
         sockets.put(player, entry);
     }
     protected void forgetPlayer( WebSocket  socket ) {
-        l.debug(()->{ 
-            return Log.message("player left %s",
-                                getPlayer(socket)
-                                        .toDebugString());
-        });
+        l.debug("player left");
         ClientEntry e = clientRegister.remove(socket.getRemoteSocketAddress());
         sockets.remove(e.player);
         room.playerLeft(e.player);

@@ -54,7 +54,7 @@ public class Board {
                 }
 		if (colision.detectColision(this, x, y)) {
 			Player player = players.get(playerId);
-
+                        if( player == null ) return;
 			int timeOfDeath = player.getTimeOfDeath();
 			player.updateScore(timeOfDeath);
 			System.out.println("KOLIZJA");
