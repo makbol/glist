@@ -25,6 +25,7 @@ public class StartNewGameCommand extends BroadcastCommand {
           errorNo = -66;
           errorDesc = "Game is running";
         } 
+        result="";
     }
 
     @Override

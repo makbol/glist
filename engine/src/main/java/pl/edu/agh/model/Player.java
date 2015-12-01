@@ -46,10 +46,10 @@ public class Player implements Serializable {
     private int y;
 
     @Expose
-    private int vx;
+    private int v_x;
 
     @Expose
-    private int vy;
+    private int v_y;
 
     /**
      * Numer ticka w którm gracz zginal
@@ -152,19 +152,19 @@ public class Player implements Serializable {
     }
 
     public int getVx() {
-        return vx;
+        return v_x;
     }
 
     public void setVx(int vx) {
-        this.vx = vx;
+        this.v_x = vx;
     }
 
     public int getVy() {
-        return vy;
+        return v_y;
     }
 
     public void setVy(int vy) {
-        this.vy = vy;
+        this.v_y = vy;
     }
 
     public void setScore(int score) {

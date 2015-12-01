@@ -75,9 +75,10 @@ public class TronServer extends WebSocketServer {
         return ce.socket;
     }
     protected void acceptPlayer( Player player, WebSocket socket ) {
-        l.debug(()->{
-            return Log.message("player accepted: %s", player.toDebugString());
-        });
+        l.debug("player accepted: "+player.toDebugString());
+//        l.debug(()->{
+//            return Log.message();
+//        });
         ClientEntry entry = new ClientEntry(player, socket);
         clientRegister.put(socket.getRemoteSocketAddress(), entry);
         sockets.put(player, entry);
