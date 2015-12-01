@@ -51,9 +51,8 @@ window.addEventListener('load', function () {
          };
          
          ws.onmessage = function (evt) {
-            console.log(evt.data)
             try {
-              var received_msg = JSON.parse(evt.data);
+              var received_msg = JSON.parse(evt.data.replace('\'', '\"'));
               switch (received_msg.commandName) {
       			    case "joinGame":
                   playerId = received_msg.result;
@@ -62,15 +61,15 @@ window.addEventListener('load', function () {
                   game.state.start('game');
       			      break;
       			    case "UPDATE":
-                  console.log(playersList)
-                  playersList = JSON.parse(received_msg.result);
                   console.log(received_msg.result)
-      			      console.log(playersList)
+                  playersList = JSON.parse(received_msg.result);
+                  // alert(playersList)
                   break;
       			    case "GAME_OVER":
       			    	break;
               }
 			     } catch(err) {
+              console.warn(evt.data.replace('\'', '\"'))
               console.warn(err)
            }
          };
