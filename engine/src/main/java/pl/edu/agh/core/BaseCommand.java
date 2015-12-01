@@ -59,7 +59,7 @@ public abstract class BaseCommand {
             case TurnCommand.COMMAND_NAME:
                 return (T) new TurnCommand(command);
             default:
-                return (T) new HelloWorldCommand(command);
+                return null;
         }
     }
 
