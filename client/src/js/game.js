@@ -12,8 +12,8 @@
   Game.prototype = {
 
     create: function () {
-      self = this;
-      // var this.game.add.group();
+      var self = this;
+      //var this.game.add.group();
 
       this.input.onDown.add(this.onInputDown, this);
       this.game.add.tileSprite(0, 0, 1920, 1920, 'background'); 
@@ -47,14 +47,8 @@
       var state = window['tron'].State;
         this.game.add.sprite(player.position.x-12, player.position.y-10, 'player');
 
-      if (this.cursors.left.isDown) {
-        player.body.velocity.x = -300;
-      } else if (this.cursors.right.isDown) {
-        player.body.moveRight(300);
-      }
-
-      if(ws.readyState != 0) {
-        ws.send( {'id' : playerId, 
+      if(window['ws'].readyState != 0) {
+        window['ws'].send( {'id' : playerId,
                    'x' : player.body.x, 
                    'y' : player.body.y,  
                    'v_x' : player.body.velocity.x, 
@@ -76,14 +70,12 @@
         if (!this.keyLock) {
             if (this.leftKey.isDown) {
                 state.setDirection((state.getDirection() +  3)%4);
-                this.updateVelocity();
                 this.keyLock = true;
-                //window['ws'].send('STEROWANIE,' + Object.keys(directions)[state.getDirection()])
+                window['ws'].send('turnCommand,' + Object.keys(window['tron'].DIRECTIONS)[state.getDirection()])
             } else if (this.rightKey.isDown) {
                 state.setDirection((state.getDirection() + 1)%4);
-                this.updateVelocity();
                 this.keyLock = true;
-                //window['ws'].send('STEROWANIE,' + Object.keys(directions)[state.getDirection()])
+                window['ws'].send('turnCommand,' + Object.keys(window['tron'].DIRECTIONS)[state.getDirection()])
             }
         } else if (this.leftKey.isUp && this.rightKey.isUp) {
                 this.keyLock = false;
@@ -91,30 +83,10 @@
     },
 
     onInputDown: function () {
-      this.game.state.start('menu');
-    },
-
-   updateVelocity: function() {
-       var state = window['tron'].State;
-       var directions = window['tron'].DIRECTIONS;
-       console.log(player)
-       if (state.getDirection() == directions.WEST) {
-           player.body.velocity.x -= this.velocity;
-           player.body.velocity.y = 0;
-       } else if (state.getDirection() == directions.EAST) {
-           player.body.velocity.x += this.velocity;
-           player.body.velocity.y = 0;
-       } else if (state.getDirection() == directions.NORTH) {
-           player.body.velocity.y -= this.velocity;
-           player.body.velocity.x = 0;
-       } else if (state.getDirection() == directions.SOUTH) {
-           player.body.velocity.y += this.velocity;
-           player.body.velocity.x = 0;
-       }
-   }
-
       this.game.state.start('gameover');
     }
+
+
   };
 
   Game.prototype.scoreTable = {
