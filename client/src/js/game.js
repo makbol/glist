@@ -11,7 +11,7 @@
 
   Game.prototype = {
     create: function () {
-
+      self = this;
       // var this.game.add.group();
 
       this.input.onDown.add(this.onInputDown, this);
@@ -24,10 +24,10 @@
       this.game.camera.follow(player);
 
       playersList.forEach(function (tmpPlayerObject){
-        playerToIdMap[tmpPlayerObject.id] = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'player');
-        this.game.physics.p2.enable(playerToIdMap[tmpPlayerObject.id]);
-        this.scoreTable.addUser(tmpPlayerObject.userName, tmpPlayerObject.color);
-      }
+        playerToIdMap[tmpPlayerObject.id] = self.game.add.sprite(self.game.world.centerX, self.game.world.centerY, 'player');
+        self.game.physics.p2.enable(playerToIdMap[tmpPlayerObject.id]);
+        self.scoreTable.addUser(tmpPlayerObject.userName, tmpPlayerObject.color);
+      });
 
       for(var i = 0; i < this.scoreTable.users.length; i++) {
         var userText = this.game.add.text(10, i*30, this.scoreTable.users[i].name, { font: "24px Arial", fill: this.scoreTable.users[i].color, align: "left" });
