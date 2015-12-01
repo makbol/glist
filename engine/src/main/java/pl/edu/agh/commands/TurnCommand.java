@@ -22,7 +22,11 @@ public class TurnCommand extends BaseCommand {
 
     @Override
     protected void execute(Room room, Player player) {
-        System.out.println("turnCommand: "+Arrays.toString(params));
+        if( player == null ) {
+            errorNo = -6;
+            errorDesc = "Missing player";
+            return;
+        }
         player.setDirection(Player.Direction.parse(direction));
     }
 

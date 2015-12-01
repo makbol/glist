@@ -86,6 +86,9 @@ public class TronServer extends WebSocketServer {
     protected void forgetPlayer( WebSocket  socket ) {
         l.debug("player left");
         ClientEntry e = clientRegister.remove(socket.getRemoteSocketAddress());
+        if( e == null ) {
+            
+        }
         sockets.remove(e.player);
         room.playerLeft(e.player);
     }
@@ -200,6 +203,7 @@ public class TronServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {   
+        System.out.println(conn.getRemoteSocketAddress().toString()+" "+message);
       String[] request = message.split(",");
       Player player = getPlayer(conn);
       BaseCommand command = BaseCommand.getCommand(request);
