@@ -40,11 +40,12 @@ public class StartNewGameCommand extends BroadcastCommand {
 
     @Override
     protected String getResponseFor(Player p) {
-        if( p.equals(executor) ) {
-            return "You stared the game";
-        } else {
-            return p.getUsername()+" started the game";
-        }
+//        if( p.equals(executor) ) {
+//            return "You stared the game";
+//        } else {
+//            return p.getUsername()+" started the game";
+//        }
+        return accessResultResponse();
     }
 
     

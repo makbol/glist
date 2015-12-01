@@ -195,10 +195,10 @@ public class TronServer extends WebSocketServer {
     
     @Override
     public void onOpen(WebSocket ws, ClientHandshake ch) {
-        ws.send(new StringBuilder("Welcome to TronServer(")
-                .append(getAddress().toString())
-                .append(")\nIssue your Commands!")
-                .toString());
+//        ws.send(new StringBuilder("Welcome to TronServer(")
+//                .append(getAddress().toString())
+//                .append(")\nIssue your Commands!")
+//                .toString());
     }
 
     @Override
