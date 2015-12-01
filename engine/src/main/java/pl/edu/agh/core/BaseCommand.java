@@ -105,7 +105,7 @@ public abstract class BaseCommand {
         }
         Properties result = new Properties();
         result.put(COMMAND_NAME_PARAM, getCommandName());
-        result.put(RESULT_PARAM, this.result);
+        result.put(RESULT_PARAM, this.result.replace("\"","'"));
         
         return new GsonBuilder().disableHtmlEscaping().create().toJson(result);
     }
@@ -117,7 +117,7 @@ public abstract class BaseCommand {
         result.put(COMMAND_NAME_PARAM, getCommandName()); 
         result.put(COMMAND_ERROR_CODE_PARAM, errorNo);
         result.put(COMMAND_ERROR_DESC_PARAM, errorDesc);
-        return new Gson().toJson(result);
+        return new Gson().toJson(result).replace("\"","'");
     }
     
     
