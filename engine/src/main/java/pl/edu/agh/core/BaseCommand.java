@@ -34,7 +34,7 @@ public abstract class BaseCommand {
     protected String errorDesc = "";
 
     /** Resultat wywolania komendy. Domyslnie null - czyli brak rezultatu. */
-    protected String result = "";
+    protected Object result = "";
 
     public BaseCommand(String[] params) {
         this.params = params;
@@ -105,9 +105,11 @@ public abstract class BaseCommand {
         }
         Properties result = new Properties();
         result.put(COMMAND_NAME_PARAM, getCommandName());
-        result.put(RESULT_PARAM, this.result.replace("\"","'"));
+        result.put(RESULT_PARAM, this.result);
         
-        return new GsonBuilder().disableHtmlEscaping().create().toJson(result).replace("\"","'");
+        String m = new GsonBuilder().disableHtmlEscaping().create().toJson(result);
+        System.out.println(m);
+        return m;
     }
     public String getErrorResponse() {
         if( wasSuccessful() ) {
@@ -117,7 +119,7 @@ public abstract class BaseCommand {
         result.put(COMMAND_NAME_PARAM, getCommandName()); 
         result.put(COMMAND_ERROR_CODE_PARAM, errorNo);
         result.put(COMMAND_ERROR_DESC_PARAM, errorDesc);
-        return new Gson().toJson(result).replace("\"","'");
+        return new Gson().toJson(result);
     }
     
     
@@ -133,6 +135,6 @@ public abstract class BaseCommand {
     }
 
     public String getResult() {
-        return result;
+        return result.toString();
     }
 }
