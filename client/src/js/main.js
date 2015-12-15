@@ -80,7 +80,8 @@ window.addEventListener('load', function () {
 
   game.state.add('boot', ns.Boot);
   game.state.add('preloader', ns.Preloader);
-  game.state.add('menu', ns.Menu);
+  game.state.add('usermenu', ns.UserMenu);
+  game.state.add('menu', ns.Menu);  
   game.state.add('game', ns.Game);
   game.state.add('gameover', ns.Gameover);
   console.log(ns.Gameover);
