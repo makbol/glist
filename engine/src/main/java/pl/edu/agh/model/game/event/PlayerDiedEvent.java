@@ -9,7 +9,6 @@ import pl.edu.agh.model.Player;
 import pl.edu.agh.model.PlayerGameEvent;
 
 /**
- *
  * @author uriel
  */
 public class PlayerDiedEvent extends PlayerGameEvent {
@@ -17,5 +16,5 @@ public class PlayerDiedEvent extends PlayerGameEvent {
     public PlayerDiedEvent(Player player) {
         super(player);
     }
-    
+
 }

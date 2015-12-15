@@ -5,24 +5,23 @@
  */
 package pl.edu.agh.util;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- *
  * @author uriel
  */
-public class ColorRandom  {
+public class ColorRandom {
     private final ThreadLocalRandom random;
-   
+
     public ColorRandom() {
         this.random = ThreadLocalRandom.current();
     }
-    
+
     public String nextColor() {
-         Color c = Color.getHSBColor(random.nextFloat(), 1.0f, 1.0f);
-         return Integer.toHexString(c.getRGB());
+        Color c = Color.getHSBColor(random.nextFloat(), 1.0f, 1.0f);
+        return Integer.toHexString(c.getRGB());
     }
-    
-    
+
+
 }

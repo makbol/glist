@@ -7,6 +7,7 @@ package pl.edu.agh.model;
 
 /**
  * Zdarzenie gdy które dotyczy tylko konkretengo gracza.
+ *
  * @author uriel
  */
 public class PlayerGameEvent extends GameEvent {

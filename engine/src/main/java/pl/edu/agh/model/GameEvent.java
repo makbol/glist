@@ -7,14 +7,15 @@ package pl.edu.agh.model;
 
 /**
  * Klasa bazowa dla zdarzeń gry
+ *
  * @author uriel
  */
 public class GameEvent {
     // Czas utworzenia zdarzenia
-    private final long  timestamp;
+    private final long timestamp;
 
     public GameEvent() {
         this.timestamp = System.currentTimeMillis();
     }
-    
+
 }

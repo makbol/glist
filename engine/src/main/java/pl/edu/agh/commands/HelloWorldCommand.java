@@ -10,7 +10,9 @@ import pl.edu.agh.model.Player;
  */
 public class HelloWorldCommand extends BaseCommand {
 
-    /** Nazwa komendy */
+    /**
+     * Nazwa komendy
+     */
     public static final String COMMAND_NAME = "HelloWorld";
 
     public HelloWorldCommand(String[] params) {

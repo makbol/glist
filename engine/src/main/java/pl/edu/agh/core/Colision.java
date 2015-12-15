@@ -8,7 +8,7 @@ public class Colision {
     private int yMin = 0;
     private int xMax;
     private int yMax;
-    
+
     public boolean detectColision(Board board, int xPlayerPosition, int yPlayerPosition) {
         xMax = board.getWidth();
         yMax = board.getHeight();

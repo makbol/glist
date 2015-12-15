@@ -15,9 +15,9 @@ import pl.edu.agh.model.PlayerGameEvent;
 import pl.edu.agh.model.game.event.GameEndEvent;
 import pl.edu.agh.model.game.event.PlayerDiedEvent;
 import pl.edu.agh.model.game.event.PlayerPositionChangedEvent;
+import pl.edu.agh.model.game.event.RoundEndEvent;
 
 /**
- *
  * @author uriel
  */
 public class ServerGameEventHandler implements IGameEventHandler {
@@ -28,30 +28,33 @@ public class ServerGameEventHandler implements IGameEventHandler {
         this.server = server;
     }
 
-    protected BaseCommand createCommandForEvent( GameEvent ge ) {
-        if( ge instanceof PlayerPositionChangedEvent ) {
+    protected BaseCommand createCommandForEvent(GameEvent ge) {
+        if (ge instanceof PlayerPositionChangedEvent) {
             return new UpdateCommand();
         }
-        if( ge instanceof PlayerDiedEvent ) {
+        if (ge instanceof PlayerDiedEvent) {
             return new ForfitCommand();
         }
         return null;
     }
-    
+
     @Override
     public void handleEvent(GameEvent e) {
-       if( e instanceof PlayerGameEvent ) {
-           PlayerGameEvent pge = (PlayerGameEvent)e;
-           BaseCommand command = createCommandForEvent(e);
-           if( command != null ) {
+        if (e instanceof PlayerGameEvent) {
+            PlayerGameEvent pge = (PlayerGameEvent) e;
+            BaseCommand command = createCommandForEvent(e);
+            if (command != null) {
                 server.invokeForPlayer(pge.getPlayer(), command);
-           }
-       }
-       if( e instanceof GameEndEvent ) {
+            }
+        }
+        if (e instanceof GameEndEvent) {
 //           server.brodcastMessage("The GAME ended!");
-       }
+        }
+        if (e instanceof RoundEndEvent) {
+            server.beginNextRound();
+        }
+
     }
-    
-    
-    
+
+
 }

@@ -28,11 +28,11 @@ public class JoinGameCommand extends BaseCommand {
             return;
         }
 
-        if( room.isGameRunning() ) {
+        if (room.isGameRunning()) {
             errorNo = -5;
             errorDesc = "GameRunning,cannot enter running game, wait for next Game";
         }
-        
+
         addedPlayer = new Player(params[1]);
         room.addPlayer(addedPlayer);
         result = addedPlayer.getUserId().toString();

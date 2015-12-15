@@ -9,7 +9,9 @@ import pl.edu.agh.model.Player;
  */
 public class StartNewGameCommand extends BroadcastCommand {
 
-    /** Nazwa komendy */
+    /**
+     * Nazwa komendy
+     */
     public static final String COMMAND_NAME = "startNewGame";
 
     private Player executor;
@@ -21,11 +23,11 @@ public class StartNewGameCommand extends BroadcastCommand {
     @Override
     protected void execute(Room room, Player player) {
         executor = player;
-        if( room.isGameRunning() ) {
-          errorNo = -66;
-          errorDesc = "Game is running";
-        } 
-        result="";
+        if (room.isGameRunning()) {
+            errorNo = -66;
+            errorDesc = "Game is running";
+        }
+        result = "";
     }
 
     @Override
@@ -43,5 +45,5 @@ public class StartNewGameCommand extends BroadcastCommand {
         return accessResultResponse();
     }
 
-    
+
 }

@@ -3,12 +3,12 @@ package pl.edu.agh.model;
 import com.google.gson.annotations.Expose;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import pl.edu.agh.util.ColorRandom;
 import pl.edu.agh.util.EnumIdOutOfBoundsException;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
-import pl.edu.agh.util.ColorRandom;
 
 public class Player implements Serializable {
     private static final double POINTS_PER_FRAME = 0.1666667;
@@ -83,9 +83,9 @@ public class Player implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if( this == o ) return true;
-        if( o instanceof Player ) {
-            Player p = (Player)o;
+        if (this == o) return true;
+        if (o instanceof Player) {
+            Player p = (Player) o;
             return p.userId.equals(userId);
         }
         return false;
@@ -96,9 +96,7 @@ public class Player implements Serializable {
         return userId.hashCode();
     }
 
-    
-    
-    
+
     public UUID getUserId() {
         return userId;
     }
@@ -113,6 +111,10 @@ public class Player implements Serializable {
 
     public int getScore() {
         return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public void updateScore(int deathTime) {
@@ -167,10 +169,6 @@ public class Player implements Serializable {
         this.v_y = vy;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public Date getLastCommandDate() {
         return lastCommandDate;
     }
@@ -185,6 +183,20 @@ public class Player implements Serializable {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public String toString() {
+        return username;
+    }
+
+    public String toDebugString() {
+        return new StringBuilder(username)
+                .append("(")
+                .append(color)
+                .append(",")
+                .append(userId.toString())
+                .append(")")
+                .toString();
     }
 
     public enum Direction {
@@ -223,19 +235,5 @@ public class Player implements Serializable {
                     return N;
             }
         }
-    }
-    
-    public String toString() {
-        return username;
-    }
-    
-    public String toDebugString() {
-        return new StringBuilder(username)
-               .append("(")
-               .append(color)
-               .append(",")
-               .append(userId.toString())
-               .append(")")
-               .toString();
     }
 }

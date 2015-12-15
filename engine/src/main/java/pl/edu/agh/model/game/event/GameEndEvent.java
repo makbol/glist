@@ -8,9 +8,8 @@ package pl.edu.agh.model.game.event;
 import pl.edu.agh.model.GameEvent;
 
 /**
- *
  * @author uriel
  */
 public class GameEndEvent extends GameEvent {
-    
+
 }

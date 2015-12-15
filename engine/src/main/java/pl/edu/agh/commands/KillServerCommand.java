@@ -10,35 +10,34 @@ import pl.edu.agh.core.Room;
 import pl.edu.agh.model.Player;
 
 /**
- *
  * @author uriel
  */
 public class KillServerCommand extends BaseCommand {
 
     public static final String COMMAND_NAME = "kill";
-    private static final String KILL_PASSWORD = "die"; 
-    
+    private static final String KILL_PASSWORD = "die";
+
     public KillServerCommand(String[] params) {
         super(params);
     }
-    
+
     @Override
     protected void execute(Room room, Player player) {
-      if( params.length < 2 || params[1].isEmpty()  ) {
-          errorNo = -2;
-          errorDesc = "Wymagane jest hasło";
-          return;
-      }
-      if( !KILL_PASSWORD.equals(params[1]) ) {
-          errorNo = -5;
-          errorDesc = "błędne hasło";
+        if (params.length < 2 || params[1].isEmpty()) {
+            errorNo = -2;
+            errorDesc = "Wymagane jest hasło";
+            return;
+        }
+        if (!KILL_PASSWORD.equals(params[1])) {
+            errorNo = -5;
+            errorDesc = "błędne hasło";
 
-      }
+        }
     }
 
     @Override
     public String getCommandName() {
         return COMMAND_NAME;
     }
-    
+
 }

@@ -7,17 +7,16 @@ package pl.edu.agh.core;
 
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.ParameterizedMessage;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 
 /**
- *
  * @author uriel
  */
 public class Log {
-    public static Message message(String format,Object... args){
+    public static Message message(String format, Object... args) {
         return new ParameterizedMessage(format, args);
     }
-    public static Message message(String format,Throwable th,Object... args){
-        return new ParameterizedMessage(format, args,th);
+
+    public static Message message(String format, Throwable th, Object... args) {
+        return new ParameterizedMessage(format, args, th);
     }
 }

@@ -1,74 +1,72 @@
 package pl.edu.agh.model;
 
+import pl.edu.agh.core.Colision;
+import pl.edu.agh.util.BoardSizeException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import pl.edu.agh.core.Colision;
-import pl.edu.agh.util.BoardSizeException;
-
 public class Board {
-	private int timeofGame;
+    private final Map<UUID, Player> players;
+    public char[][] tabBoard;
+    private int timeofGame;
+    private int height;
+    private int width;
+    private Colision colision;
 
-	private int height;
-	private int width;
-	private Colision colision;
-	public char[][] tabBoard;
+    public Board(int width, int height, List<Player> playerList) throws BoardSizeException {
+        super();
 
-	private final Map<UUID, Player> players;
+        players = new HashMap<>();
+        for (Player player : playerList) {
+            players.put(player.getUserId(), player);
+        }
 
-	public Board(int width, int height, List<Player> playerList) throws BoardSizeException {
-		super();
+        colision = new Colision();
+        if (width > 1 && height > 1) {
+            this.width = width;
+            this.height = height;
+        } else {
+            throw new BoardSizeException("Selected board size is stupid. Get your sh*t together.");
+        }
+        tabBoard = new char[height][width];
+    }
 
-		players = new HashMap<>();
-		for (Player player : playerList) {
-			players.put(player.getUserId(), player);
-		}
+    public void drawBoard() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                System.out.print(tabBoard[j][i] + " ");
+                if (i == width - 1)
+                    System.out.println();
+            }
+        }
+    }
 
-		colision = new Colision();
-		if (width > 1 && height > 1) {
-			this.width = width;
-			this.height = height;
-		} else {
-			throw new BoardSizeException("Selected board size is stupid. Get your sh*t together.");
-		}
-		tabBoard = new char[height][width];
-	}
+    public void setPlayerPosition(int x, int y, UUID playerId) throws BoardSizeException {
+        if (x < 0 || y < 0 || x >= width || y >= height) {
+            throw new BoardSizeException("Board size exeeded");
+        }
+        if (colision.detectColision(this, x, y)) {
+            Player player = players.get(playerId);
+            if (player == null) return;
+            int timeOfDeath = player.getTimeOfDeath();
+            player.updateScore(timeOfDeath);
+            System.out.println("KOLIZJA");
 
-	public void drawBoard() {
-		System.out.print("\033[H\033[2J");
-		System.out.flush();
-		for (int j = 0; j < height; j++) {
-			for (int i = 0; i < width; i++) {
-				System.out.print(tabBoard[j][i] + " ");
-				if (i == width - 1)
-					System.out.println();
-			}
-		}
-	}
+        } else {
+            tabBoard[x][y] = playerId.toString().charAt(0);
+        }
+    }
 
-	public void setPlayerPosition(int x, int y, UUID playerId) throws BoardSizeException {
-                if( x < 0 || y < 0 || x >= width || y >= height ) {
-                    throw new BoardSizeException("Board size exeeded");
-                }
-		if (colision.detectColision(this, x, y)) {
-			Player player = players.get(playerId);
-                        if( player == null ) return;
-			int timeOfDeath = player.getTimeOfDeath();
-			player.updateScore(timeOfDeath);
-			System.out.println("KOLIZJA");
+    public int getHeight() {
+        return height;
+    }
 
-		} else {
-			tabBoard[x][y] = playerId.toString().charAt(0);
-		}
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public int getWidth() {
-		return width;
-	}
+    public int getWidth() {
+        return width;
+    }
 }

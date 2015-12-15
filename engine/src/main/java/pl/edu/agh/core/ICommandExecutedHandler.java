@@ -9,9 +9,8 @@ import org.java_websocket.WebSocket;
 import pl.edu.agh.model.Player;
 
 /**
- *
  * @author uriel
  */
 public interface ICommandExecutedHandler<T extends BaseCommand> {
-    boolean onCommandExecuted( WebSocket socket, Player player, T command );
+    boolean onCommandExecuted(WebSocket socket, Player player, T command);
 }

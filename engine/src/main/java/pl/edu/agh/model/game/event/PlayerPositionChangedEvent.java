@@ -5,25 +5,23 @@
  */
 package pl.edu.agh.model.game.event;
 
-import pl.edu.agh.model.GameEvent;
 import pl.edu.agh.model.Player;
 import pl.edu.agh.model.PlayerGameEvent;
 
 /**
- *
  * @author uriel
  */
 public class PlayerPositionChangedEvent extends PlayerGameEvent {
 
     private final int newX;
     private final int newY;
-    
-    public PlayerPositionChangedEvent(Player p,int x,int y) {
+
+    public PlayerPositionChangedEvent(Player p, int x, int y) {
         super(p);
         newX = x;
         newY = y;
     }
-    
+
     public int getNewX() {
         return newX;
     }
@@ -31,7 +29,6 @@ public class PlayerPositionChangedEvent extends PlayerGameEvent {
     public int getNewY() {
         return newY;
     }
-    
-    
-    
+
+
 }

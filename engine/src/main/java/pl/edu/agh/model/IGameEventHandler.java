@@ -6,9 +6,8 @@
 package pl.edu.agh.model;
 
 /**
- *
  * @author uriel
  */
 public interface IGameEventHandler {
-    void handleEvent( GameEvent e );
+    void handleEvent(GameEvent e);
 }
