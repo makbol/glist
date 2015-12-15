@@ -6,23 +6,7 @@ var playerId;
 
 var GAME_SERVER_ADDRESS = "ws://10.22.107.19:1666";
 
-var playersList =  [{
-    'x' : 700,
-    'y' : 700,
-    'v_x' : 5,
-    'v_y' : 5,
-    'color' : 'red',
-    'id' : 1000,
-    'userName' : 'Player1'
-  }, {
-    'x' : 800,
-    'y' : 800,
-    'v_x' : 2,
-    'v_y' : 2,
-    'color' : 'yellow',
-    'id' : 1100,
-    'userName' : 'Player2'
-  }];
+var playersList =  [];
 
 function makeid()
 {
