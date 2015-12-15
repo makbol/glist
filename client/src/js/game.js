@@ -61,7 +61,6 @@
         player.body.moveRight(300);
       }
 
-      }
 
       playersList.forEach(function (tmpPlayer){
         
