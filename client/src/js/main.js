@@ -19,20 +19,20 @@ function makeid()
     return text;
 }
 
-var ws;
-
 window.addEventListener('load', function () {
 
    var ns = window['tron'];
+   var ws;
 
-   function initiateWebSocketConnection() {
-      if ("WebSocket" in window) {
-         ws = new WebSocket(GAME_SERVER_ADDRESS);
-         
-         ws.onopen = function(event) {
-         	  var id = makeid();
-            ws.send("joinGame," + id);
-         };
+    function initiateWebSocketConnection() {
+        if ("WebSocket" in window) {
+            ws = new WebSocket(GAME_SERVER_ADDRESS);
+
+            window['ws'] = ws;
+            ws.onopen = function(event) {
+                var id = makeid();
+                ws.send("joinGame," + id);
+            };
          
          ws.onmessage = function (evt) {
             try {
