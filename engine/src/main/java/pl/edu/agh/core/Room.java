@@ -6,6 +6,8 @@ import pl.edu.agh.model.Player;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import pl.edu.agh.model.IGameEventHandler;
 
 /**
@@ -13,6 +15,8 @@ import pl.edu.agh.model.IGameEventHandler;
  */
 public class Room {
 
+     private static Logger l = LogManager.getLogger(TronServer.class);
+    
     /** Numer pokoju */
     private static long roomCounter = 0;
 
@@ -41,6 +45,7 @@ public class Room {
         gameWorker.setName("GameWorker");
         gameWorker.setDaemon(true);
         gameWorker.start();
+        l.info("Game Started with "+players.size()+" players");
     }
     
     public boolean isGameRunning() {
@@ -88,6 +93,9 @@ public class Room {
         players.remove(p);
         if( game != null ) {
             game.playerLeft(p);
+            if( game.getPlayersList().size()  < 2 ) {
+                endGame();
+            }
         }
     }
     
@@ -102,6 +110,7 @@ public class Room {
     public void endGame() {
         gameWorker.interrupt();
         game = null;
+        l.info("GameEnd");
     }
     
 }

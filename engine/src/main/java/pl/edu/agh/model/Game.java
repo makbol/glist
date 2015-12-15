@@ -29,6 +29,13 @@ public class Game implements Runnable {
        playersList = new ArrayList<>();
     }
 
+    public List<Player> getPlayersList() {
+        return playersList;
+    }
+    
+    
+    
+
     public void setEventHandler(IGameEventHandler eventHandler) {
         this.eventHandler = eventHandler;
     }

@@ -25,7 +25,7 @@ import pl.edu.agh.model.Player;
 public class TronServer extends WebSocketServer {
 
     private static Logger l = LogManager.getLogger(TronServer.class);
-    private static final int PORT = 1666;
+    private static final int PORT = 1777;
     
     private static TronServer instance;
     
@@ -86,11 +86,11 @@ public class TronServer extends WebSocketServer {
     protected void forgetPlayer( WebSocket  socket ) {
         l.debug("player left");
         ClientEntry e = clientRegister.remove(socket.getRemoteSocketAddress());
-        if( e == null ) {
-            
+        if( e != null ) {
+            sockets.remove(e.player);
+            room.playerLeft(e.player);
         }
-        sockets.remove(e.player);
-        room.playerLeft(e.player);
+        
     }
     
     protected void brodcastMessage( String message ) {
