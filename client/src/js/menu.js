@@ -22,7 +22,8 @@
   };
   
   function startGame() {
-	  this.game.state.start('game');
+    ws.send("startNewGame");
+    // this.game.state.start('game');
   }
   
   function showResults() {

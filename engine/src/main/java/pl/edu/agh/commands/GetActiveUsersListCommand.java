@@ -31,8 +31,8 @@ public class GetActiveUsersListCommand extends BaseCommand {
             }
         }
 
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        result = gson.toJson(activePlayers);
+//        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        result = activePlayers;
     }
 
     @Override

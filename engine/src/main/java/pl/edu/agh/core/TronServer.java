@@ -75,20 +75,20 @@ public class TronServer extends WebSocketServer {
         return ce.socket;
     }
     protected void acceptPlayer( Player player, WebSocket socket ) {
-        l.debug(()->{
-            return Log.message("player accepted: %s", player.toDebugString());
-        });
+        l.debug("player accepted: "+player.toDebugString());
+//        l.debug(()->{
+//            return Log.message();
+//        });
         ClientEntry entry = new ClientEntry(player, socket);
         clientRegister.put(socket.getRemoteSocketAddress(), entry);
         sockets.put(player, entry);
     }
     protected void forgetPlayer( WebSocket  socket ) {
-        l.debug(()->{ 
-            return Log.message("player left %s",
-                                getPlayer(socket)
-                                        .toDebugString());
-        });
+        l.debug("player left");
         ClientEntry e = clientRegister.remove(socket.getRemoteSocketAddress());
+        if( e == null ) {
+            
+        }
         sockets.remove(e.player);
         room.playerLeft(e.player);
     }
@@ -195,14 +195,15 @@ public class TronServer extends WebSocketServer {
     
     @Override
     public void onOpen(WebSocket ws, ClientHandshake ch) {
-        ws.send(new StringBuilder("Welcome to TronServer(")
-                .append(getAddress().toString())
-                .append(")\nIssue your Commands!")
-                .toString());
+//        ws.send(new StringBuilder("Welcome to TronServer(")
+//                .append(getAddress().toString())
+//                .append(")\nIssue your Commands!")
+//                .toString());
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {   
+        System.out.println(conn.getRemoteSocketAddress().toString()+" "+message);
       String[] request = message.split(",");
       Player player = getPlayer(conn);
       BaseCommand command = BaseCommand.getCommand(request);

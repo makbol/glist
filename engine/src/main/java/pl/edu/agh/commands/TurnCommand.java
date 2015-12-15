@@ -1,5 +1,6 @@
 package pl.edu.agh.commands;
 
+import java.util.Arrays;
 import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
 import pl.edu.agh.model.Player;
@@ -21,6 +22,11 @@ public class TurnCommand extends BaseCommand {
 
     @Override
     protected void execute(Room room, Player player) {
+        if( player == null ) {
+            errorNo = -6;
+            errorDesc = "Missing player";
+            return;
+        }
         player.setDirection(Player.Direction.parse(direction));
     }
 

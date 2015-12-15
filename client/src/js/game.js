@@ -53,16 +53,27 @@
                    'y' : player.body.y,  
                    'v_x' : player.body.velocity.x, 
                    'v_y' : player.body.velocity.y } );
+      
+}
+      if (this.cursors.left.isDown) {
+        player.body.velocity.x = -300;
+      } else if (this.cursors.right.isDown) {
+        player.body.moveRight(300);
+      }
+
       }
 
       playersList.forEach(function (tmpPlayer){
+        
         var playerObject = playerToIdMap[tmpPlayer.id];
+        if (playerObject != undefined) {
         playerObject.body.velocity.x = tmpPlayer.v_x;
         playerObject.body.velocity.y = tmpPlayer.v_y;
         
         if (getDistance(playerObject.body.x, playerObject.body.y, tmpPlayer.x, tmpPlayer.y) > 10) {
           playerObject.body.x = tmpPlayer.x;
           playerObject.body.y = tmpPlayer.y;
+        }
         }
 
       });
