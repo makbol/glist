@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/engine/TronGame.iml" filepath="$PROJECT_DIR$/engine/TronGame.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/tron.iml" filepath="$PROJECT_DIR$/.idea/tron.iml" />
     </modules>
   </component>
