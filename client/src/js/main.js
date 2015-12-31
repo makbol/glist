@@ -4,7 +4,7 @@ var player;
 
 var playerId; 
 
-var GAME_SERVER_ADDRESS = "ws://10.22.107.19:1666";
+var GAME_SERVER_ADDRESS = "ws://192.168.0.12:1666";
 
 var playersList =  [];
 
@@ -42,10 +42,13 @@ window.addEventListener('load', function () {
                   playerId = received_msg.result;
                   break;
                 case "startNewGame":
+                  playersList = received_msg.result;
+                  console.log("Hello " + playersList)
                   game.state.start('game');
-      			      break;
+                  break;
       			    case "UPDATE":
                   playersList = received_msg.result;
+                  console.log(playersList)
                   break;
       			    case "GAME_OVER":
       			    	break;
