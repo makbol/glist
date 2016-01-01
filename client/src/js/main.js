@@ -8,6 +8,8 @@ var GAME_SERVER_ADDRESS = "ws://192.168.0.12:1666";
 
 var playersList =  [];
 
+var gameToStart = false;
+
 function makeid()
 {
     var text = "";
@@ -42,11 +44,15 @@ window.addEventListener('load', function () {
                   playerId = received_msg.result;
                   break;
                 case "startNewGame":
-                  playersList = received_msg.result;
-                  console.log("Hello " + playersList)
-                  game.state.start('game');
+                  // playersList = received_msg.result;
+                  console.log("Game Started")
+                  gameToStart = true;
                   break;
-      			    case "UPDATE":
+                case "UPDATE":
+                  if (gameToStart) {
+                    game.state.start('game');
+                    gameToStart = false;
+                  }
                   playersList = received_msg.result;
                   console.log(playersList)
                   break;

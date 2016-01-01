@@ -16,8 +16,8 @@
         this._position = initialPosition;
 
         this.setDirection = function (newDirection) {
-            console.log(newDirection)
-            this._direction = newDirection
+            console.log(newDirection);
+            this._direction = newDirection;
         };
 
         this.getDirection = function () {

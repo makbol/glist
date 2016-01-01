@@ -14,72 +14,108 @@ Game.prototype = {
     // var this.game.add.group();
 
     this.input.onDown.add(this.onInputDown, this);
-    this.game.add.tileSprite(0, 0, 1920, 1920, 'background'); 
-    this.game.world.setBounds(0, 0, 1920, 1920);
+    this.game.add.tileSprite(0, 0, 1620, 1620, 'background'); 
+    this.game.world.setBounds(0, 0, 1620, 1620);
     this.game.physics.startSystem(Phaser.Physics.P2JS);
     
-    player = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'player');
-    
-    playerToIdMap[playerId] = player;
-
-    this.game.physics.p2.enable(player);
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-    this.game.camera.follow(player);
-
     playersList.forEach(function (tmpPlayerObject){
-      playerToIdMap[tmpPlayerObject.id] = self.game.add.sprite(self.game.world.centerX, self.game.world.centerY, 'player');
-      self.game.physics.p2.enable(playerToIdMap[tmpPlayerObject.id]);
+      var tmpSpirite = self.game.add.sprite(self.game.world.centerX, self.game.world.centerY, 'player');
+      playerToIdMap[tmpPlayerObject.userId] = tmpSpirite;
+      self.game.physics.p2.enable(tmpSpirite);
       self.scoreTable.addUser(tmpPlayerObject.userName, tmpPlayerObject.color);
     });
+    
+    player = playerToIdMap[playerId];
+    this.game.camera.follow(player);
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+
+    // playerToIdMap[playerId] = player;
+    // this.game.physics.p2.enable(player);
 
     for(var i = 0; i < this.scoreTable.users.length; i++) {
       var userText = this.game.add.text(10, i*30, this.scoreTable.users[i].name, { font: "24px Arial", fill: this.scoreTable.users[i].color, align: "left" });
       userText.fixedToCamera = true;
     }
 
+    this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+
+    // this.upKey = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    // this.downKey = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+
+    this.keyLock = false;
+    this.velocity = 200;
   },
 
   update: function () {
     player.body.setZeroVelocity();
+    var state = window['tron'].State;
+
+    if(window['ws'].readyState != 0) {
+      window['ws'].send( { 'id' : playerId,
+                            'x' : player.body.x, 
+                            'y' : player.body.y,  
+                          'v_x' : player.body.velocity.x, 
+                          'v_y' : player.body.velocity.y } );
+    }
+
+    player.body.setZeroVelocity();
+    
     if (this.cursors.up.isDown) {
       player.body.moveUp(300)
     } else if (this.cursors.down.isDown) {
       player.body.moveDown(300);
     }
-
+    
     if (this.cursors.left.isDown) {
       player.body.velocity.x = -300;
     } else if (this.cursors.right.isDown) {
       player.body.moveRight(300);
     }
 
-    if(ws.readyState != 0) {
-      // ws.send( {'id' : playerId, 
-      //            'x' : player.body.x, 
-      //            'y' : player.body.y,  
-      //            'v_x' : player.body.velocity.x, 
-      //            'v_y' : player.body.velocity.y } );
-    }
-
     playersList.forEach(function (tmpPlayer){
       
-      var playerObject = playerToIdMap[tmpPlayer.id];
+      var playerObject = playerToIdMap[tmpPlayer.userId];
       if (playerObject != undefined) {
-        playerObject.body.velocity.x = tmpPlayer.v_x;
-        playerObject.body.velocity.y = tmpPlayer.v_y;
-        
-        // if (getDistance(playerObject.body.x, playerObject.body.y, tmpPlayer.x, tmpPlayer.y) > 10) {
+        if (tmpPlayer.userId != playerId ){ // getDistance(playerObject.body.x, playerObject.body.y, tmpPlayer.x, tmpPlayer.y) > 10) {
+          playerObject.body.velocity.x = 0;//tmpPlayer.v_x;
+          playerObject.body.velocity.y = 0;//tmpPlayer.v_y;
           playerObject.body.x = tmpPlayer.x;
           playerObject.body.y = tmpPlayer.y;
+        } else if(getDistance(playerObject.body.x, playerObject.body.y, tmpPlayer.x, tmpPlayer.y) > 10) {
+          playerObject.body.x = tmpPlayer.x;
+          playerObject.body.y = tmpPlayer.y;          
+        }
 
-          console.log("x: " + tmpPlayer.x + " y: " + tmpPlayer.x)
-        // }
       } else {
-        alert(playerObject)
+        // alert(playerObject)
         console.log(tmpPlayer)
       }
 
     });
+
+    if (!this.keyLock) {
+        if (this.leftKey.isDown) {
+            state.setDirection((state.getDirection() +  3)%4);
+            this.keyLock = true;
+            window['ws'].send('turnCommand,' + Object.keys(window['tron'].DIRECTIONS)[state.getDirection()])
+        } else if (this.rightKey.isDown) {
+            state.setDirection((state.getDirection() + 1)%4);
+            this.keyLock = true;
+            window['ws'].send('turnCommand,' + Object.keys(window['tron'].DIRECTIONS)[state.getDirection()])
+        }
+        // else if (this.upKey.isDown) {
+        //     state.setDirection((state.getDirection() + 2)%4);
+        //     this.keyLock = true;
+        //     window['ws'].send('turnCommand,' + Object.keys(window['tron'].DIRECTIONS)[state.getDirection()])
+        // } else if (this.downKey.isDown) {
+        //     state.setDirection((state.getDirection() + 4)%4);
+        //     this.keyLock = true;
+        //     window['ws'].send('turnCommand,' + Object.keys(window['tron'].DIRECTIONS)[state.getDirection()])
+        // }
+    } else if (this.leftKey.isUp && this.rightKey.isUp) { //} && this.upKey.isUp && this.downKey.isUp) {
+        this.keyLock = false;
+    }
   },
 
   onInputDown: function () {
