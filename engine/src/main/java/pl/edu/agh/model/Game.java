@@ -18,7 +18,7 @@ public class Game implements Runnable {
      *  Częstotliwość przetwarzania pętli głównej gry wyrażona w liczbie
      *  pętli na sekunde
      */
-    private int frequency = 1;
+    private int frequency = 10;
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -28,6 +28,13 @@ public class Game implements Runnable {
     public Game() {
        playersList = new ArrayList<>();
     }
+
+    public List<Player> getPlayersList() {
+        return playersList;
+    }
+    
+    
+    
 
     public void setEventHandler(IGameEventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -47,12 +54,20 @@ public class Game implements Runnable {
     
     
     public Game(List<Player> playersList) {
-        this.playersList = playersList;
+        // FIX: Nie powinnismy uwspólniać listy graczy w pokoju z graczami w grze
+        // bo jak ktos przyjdzie do pokoju po rozpoczęcu gry
+        // to NIE może dołączyć do gry
+        this.playersList = new ArrayList(playersList);
+        
+        // FIX: Z punktu widzenia wieloœatkowosci czytelniej będzie jak 
+        // inicjalizcja czyli funkcj amoyfikujaca stan obiektu będzie
+        // wykoanna w dedeykowanym do tego wątku a nie na zewnątrz
+        //initGame();
     }
 
-    public void run() {
-        int width = 20;
-        int height = 20;
+    private void initGame() {
+         int width = 2000;
+        int height = 2000;
         try {
             board = new Board(width, height, playersList);
         } catch (BoardSizeException e) {
@@ -66,26 +81,39 @@ public class Game implements Runnable {
             p.setY(random.nextInt(height));
             try {
                 p.setDirection(Player.Direction.parse(random.nextInt(4)));
+                p.setVx(0);
+                p.setVy(0);
+                if(p.getDirection() == Player.Direction.N) {
+                    p.setVy(1);
+                } else if(p.getDirection() == Player.Direction.S) {
+                    p.setVy(-1);
+                } else if(p.getDirection() == Player.Direction.E) {
+                    p.setVx(1);
+                } else if(p.getDirection() == Player.Direction.W) {
+                    p.setVx(-1);
+                }
                 board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
             } catch (EnumIdOutOfBoundsException | BoardSizeException e) {
                 e.printStackTrace();
             }
             firePlayerPositionChanged(p, p.getX(), p.getY());
         }
-
+    }
+    
+    public void run() {
+        initGame();
         while (!Thread.interrupted()) {
+            // Zawiadamiam wszystkie wątki  które czekały by na zakończenie
+            // inicjalizacji Gry
+             synchronized(this) {
+                notifyAll();
+            }
             try {
                 List<Player> currentPlayers = null;
-                
                 synchronized(playersList) {
                     currentPlayers = new ArrayList<>(playersList);
                 }
-                
-                if( currentPlayers.size() < 2 ) {
-                    break;
-                }
-                
-                for (Player p : currentPlayers) {
+                for (Player p : currentPlayers ) {
                     switch (p.getDirection()) {
                         case N:
                             p.setY(p.getY() + 1);
@@ -107,6 +135,7 @@ public class Game implements Runnable {
                         onPlayerDied(p);
                     }
                 }
+                
 //                board.drawBoard();
 
                 Thread.sleep(1000/frequency);
@@ -118,7 +147,14 @@ public class Game implements Runnable {
         fireGameEvent(new GameEndEvent());
     }
 
-    public void playerLeft( Player p ) {
+    public synchronized void waitForGameToStart() throws InterruptedException {
+        wait();
+    }
+    
+    public void killPlayer( Player p ) {
+        if( p == null )  {
+            throw new NullPointerException();
+        }
         synchronized(playersList) {
             playersList.remove(p);
         }

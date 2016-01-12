@@ -1,5 +1,6 @@
 package pl.edu.agh.core;
 
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import pl.edu.agh.model.Player;
 public class TronServer extends WebSocketServer {
 
     private static Logger l = LogManager.getLogger(TronServer.class);
-    private static final int PORT = 1666;
+    private static final int PORT = 1777;
     
     private static TronServer instance;
     
@@ -52,12 +53,12 @@ public class TronServer extends WebSocketServer {
       commandHandlers.add(this::onBroadcastExecuted);
       commandHandlers.add(this::onJoinExecuted);
       commandHandlers.add(this::onKillExecuted);
-      commandHandlers.add(this::onStartNewGameExecuted);
       gameHandler = new ServerGameEventHandler(this);
       room = createRoom();
     }
     private Room createRoom() {
         Room room = new Room();
+        room.registerGameEventHandler(gameHandler);
         return room;
     }
 
@@ -75,22 +76,22 @@ public class TronServer extends WebSocketServer {
         return ce.socket;
     }
     protected void acceptPlayer( Player player, WebSocket socket ) {
-        l.debug(()->{
-            return Log.message("player accepted: %s", player.toDebugString());
-        });
+        l.debug("player accepted: "+player.toDebugString());
+//        l.debug(()->{
+//            return Log.message();
+//        });
         ClientEntry entry = new ClientEntry(player, socket);
         clientRegister.put(socket.getRemoteSocketAddress(), entry);
         sockets.put(player, entry);
     }
     protected void forgetPlayer( WebSocket  socket ) {
-        l.debug(()->{ 
-            return Log.message("player left %s",
-                                getPlayer(socket)
-                                        .toDebugString());
-        });
+        l.debug("player left");
         ClientEntry e = clientRegister.remove(socket.getRemoteSocketAddress());
-        sockets.remove(e.player);
-        room.playerLeft(e.player);
+        if( e != null ) {
+            sockets.remove(e.player);
+            room.removePlayer(e.player);
+        }
+        
     }
     
     protected void brodcastMessage( String message ) {
@@ -126,18 +127,6 @@ public class TronServer extends WebSocketServer {
        }
        return false;
     }
-    protected boolean onStartNewGameExecuted( WebSocket socket, Player player, BaseCommand command ) {
-        if( command instanceof StartNewGameCommand ) {
-            try{
-                room.startNewGame(gameHandler);
-            }catch(IllegalStateException ie) {
-                command.errorNo = -66;
-                command.errorDesc = "Game already running";
-            }
-            return true;
-        }
-        return false;
-    }
     protected boolean onJoinExecuted( WebSocket socket, Player player, BaseCommand command ) {
        if( command instanceof JoinGameCommand ) {
             JoinGameCommand jgc = (JoinGameCommand)command;
@@ -168,7 +157,8 @@ public class TronServer extends WebSocketServer {
                    break;
                }
            }
-           return command.getResultResponse();
+           String s = command.getResultResponse();
+           return s;
        } else {
            return command.getErrorResponse();
        }
@@ -195,14 +185,15 @@ public class TronServer extends WebSocketServer {
     
     @Override
     public void onOpen(WebSocket ws, ClientHandshake ch) {
-        ws.send(new StringBuilder("Welcome to TronServer(")
-                .append(getAddress().toString())
-                .append(")\nIssue your Commands!")
-                .toString());
+//        ws.send(new StringBuilder("Welcome to TronServer(")
+//                .append(getAddress().toString())
+//                .append(")\nIssue your Commands!")
+//                .toString());
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {   
+      System.out.println(conn.getRemoteSocketAddress().toString()+" "+message);
       String[] request = message.split(",");
       Player player = getPlayer(conn);
       BaseCommand command = BaseCommand.getCommand(request);
@@ -250,6 +241,10 @@ public class TronServer extends WebSocketServer {
    
     public static void main(String[] args) throws IOException {
        TronServer.getInstance().start();
+//        List<Player> pl = new ArrayList<>();
+//        pl.add(new Player("a"));
+//        System.out.println("GSON: "+new GsonBuilder().disableHtmlEscaping().create().toJson(pl));
+        
     }  
     
     private static class ClientEntry {

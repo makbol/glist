@@ -30,7 +30,7 @@ public class ForfitCommand extends BroadcastCommand {
 
     @Override
     protected void execute(Room room, Player player) {
-        result = "You Lost!";
+//        result = "You Lost!";
         executor = player;
     }
 

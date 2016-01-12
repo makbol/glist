@@ -11,25 +11,36 @@ import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
 import pl.edu.agh.model.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author uriel
  */
-public class SyncCommand extends BaseCommand {
+public class UpdateCommand extends BaseCommand {
 
-    private static final String COMMAND_NAME = "sync";
+    private static final String COMMAND_NAME = "UPDATE";
 
-    public SyncCommand() {
+    public UpdateCommand() {
         super(new String[]{COMMAND_NAME});
     }    
-    public SyncCommand(String[] params) {
+    public UpdateCommand(String[] params) {
         super(params);
     }
 
     @Override
     protected void execute(Room room, Player player) {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        result = gson.toJson(player);
+        List<Player> players = room.getGamePlayer();
+        List<Player> activePlayers = new ArrayList<>();
+        for(Player player1 : players) {
+            if(player1.getTimeOfDeath() == null) {
+                activePlayers.add(player1);
+            }
+        }
+
+//        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        result = activePlayers;
     }
 
     @Override

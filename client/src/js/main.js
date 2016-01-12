@@ -4,25 +4,11 @@ var player;
 
 var playerId; 
 
-var GAME_SERVER_ADDRESS = "ws://10.22.107.19:1666";
+var GAME_SERVER_ADDRESS = "ws://192.168.0.12:1666";
 
-var playersList =  [{
-    'x' : 700,
-    'y' : 700,
-    'v_x' : 5,
-    'v_y' : 5,
-    'color' : 'red',
-    'id' : 1000,
-    'userName' : 'Player1'
-  }, {
-    'x' : 800,
-    'y' : 800,
-    'v_x' : 2,
-    'v_y' : 2,
-    'color' : 'yellow',
-    'id' : 1100,
-    'userName' : 'Player2'
-  }];
+var playersList =  [];
+
+var gameToStart = false;
 
 function makeid()
 {
@@ -35,36 +21,48 @@ function makeid()
     return text;
 }
 
-var ws;
-
 window.addEventListener('load', function () {
 
    var ns = window['tron'];
+   var ws;
 
-   function initiateWebSocketConnection() {
-      if ("WebSocket" in window) {
-         ws = new WebSocket(GAME_SERVER_ADDRESS);
+    function initiateWebSocketConnection() {
+        if ("WebSocket" in window) {
+            ws = new WebSocket(GAME_SERVER_ADDRESS);
+
+            window['ws'] = ws;
+            ws.onopen = function(event) {
+                var id = makeid();
+                ws.send("joinGame," + id);
+            };
          
-         ws.onopen = function(event) {
-         	  var id = makeid();
-            ws.send("joinGame," + id);
-         };
-         
-         ws.onmessage = function (evt) { 
-            var received_msg = JSON.parse(evt.data);
-            switch (received_msg.commandName) {
-  			    case "joinGame":
-              playerId = received_msg.result;
-              break;
-            case "START":
-              game.state.start('game');
-  			      break;
-  			    case "UPDATE":
-              playersList = received_msg.data;
-  			      break;
-  			    case "GAME_OVER":
-  			    	break;
-			     }
+         ws.onmessage = function (evt) {
+            try {
+              var received_msg = JSON.parse(evt.data.replace('\'', '\"'));
+              switch (received_msg.commandName) {
+      			    case "joinGame":
+                  playerId = received_msg.result;
+                  break;
+                case "startNewGame":
+                  // playersList = received_msg.result;
+                  console.log("Game Started")
+                  gameToStart = true;
+                  break;
+                case "UPDATE":
+                  if (gameToStart) {
+                    game.state.start('game');
+                    gameToStart = false;
+                  }
+                  playersList = received_msg.result;
+                  console.log(playersList)
+                  break;
+      			    case "GAME_OVER":
+      			    	break;
+              }
+			     } catch(err) {
+              console.warn(evt.data.replace('\'', '\"'))
+              console.warn(err)
+           }
          };
   
          ws.onclose = function() { 
