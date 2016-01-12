@@ -52,15 +52,15 @@ public class Board {
                 if( x < 0 || y < 0 || x >= width || y >= height ) {
                     throw new BoardSizeException("Board size exeeded");
                 }
-		if (colision.detectColision(this, x, y)) {
-			Player player = players.get(playerId);
-			if( player == null || player.getTimeOfDeath() != null) return;
-			int timeOfDeath = player.getTimeOfDeath();
-			player.updateScore(timeOfDeath);
-			
-		} else {
+//		if (colision.detectColision(this, x, y)) {
+//			Player player = players.get(playerId);
+//			if( player == null || player.getTimeOfDeath() != null) return;
+//			int timeOfDeath = player.getTimeOfDeath();
+//			player.updateScore(timeOfDeath);
+//			
+//		} else {
 			tabBoard[x][y] = playerId.toString().charAt(0);
-		}
+//		}
 	}
 
 	public int getHeight() {

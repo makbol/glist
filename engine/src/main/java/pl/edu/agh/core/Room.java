@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import pl.edu.agh.model.GameEvent;
 import pl.edu.agh.model.IGameEventHandler;
+import pl.edu.agh.model.game.event.GameEndEvent;
 
 /**
  * Klasa pokoju na serwerze.
@@ -50,7 +51,6 @@ public class Room implements IGameEventHandler {
         return game;
     }
 //</editor-fold>
-    
     
     /**
      * Wywolanie komendy w danym pokoju. Logika zalezna od komendy.
@@ -146,6 +146,9 @@ public class Room implements IGameEventHandler {
     }
     @Override
     public void handleEvent(GameEvent e) {
+        if( e instanceof GameEndEvent ) {
+            game = null;
+        }
         synchronized(gameEventListeners) {
             for( IGameEventHandler geh : gameEventListeners ) {
                 geh.handleEvent(e);
@@ -153,7 +156,5 @@ public class Room implements IGameEventHandler {
         }
     }
 //</editor-fold>
-    
-    
-    
+
 }

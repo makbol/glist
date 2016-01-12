@@ -226,7 +226,7 @@ public class Player implements Serializable {
     }
     
     public String toString() {
-        return username;
+        return username+" ("+x+","+y+")("+v_x+","+v_y+")";
     }
     
     public String toDebugString() {
