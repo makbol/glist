@@ -4,7 +4,7 @@ var player;
 
 var playerId; 
 
-var GAME_SERVER_ADDRESS = "ws://192.168.0.12:1666";
+var GAME_SERVER_ADDRESS = "ws://10.22.107.19:1777";
 
 var playersList =  [];
 
@@ -60,7 +60,6 @@ window.addEventListener('load', function () {
       			    	break;
               }
 			     } catch(err) {
-              console.warn(evt.data.replace('\'', '\"'))
               console.warn(err)
            }
          };

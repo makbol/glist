@@ -41,7 +41,8 @@ public abstract class BaseCommand {
     }
 
     /** Metoda zwraca odpowiednia implementacje komendy dla komendy w postaci stringa. */
-    public static < T extends BaseCommand > T getCommand(String[] command) {
+    @SuppressWarnings("unchecked")
+	public static < T extends BaseCommand > T getCommand(String[] command) {
         if(command.length < 1) {
             return null;
         }
