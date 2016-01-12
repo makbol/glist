@@ -158,7 +158,6 @@ public class TronServer extends WebSocketServer {
                }
            }
            String s = command.getResultResponse();
-           System.out.println(command.getClass().getSimpleName()+" "+s+" "+command.result);
            return s;
        } else {
            return command.getErrorResponse();
@@ -194,7 +193,7 @@ public class TronServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {   
-        System.out.println(conn.getRemoteSocketAddress().toString()+" "+message);
+      System.out.println(conn.getRemoteSocketAddress().toString()+" "+message);
       String[] request = message.split(",");
       Player player = getPlayer(conn);
       BaseCommand command = BaseCommand.getCommand(request);

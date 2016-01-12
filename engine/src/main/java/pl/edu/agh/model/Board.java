@@ -57,8 +57,7 @@ public class Board {
 			if( player == null || player.getTimeOfDeath() != null) return;
 			int timeOfDeath = player.getTimeOfDeath();
 			player.updateScore(timeOfDeath);
-			System.out.println("KOLIZJA");
-
+			
 		} else {
 			tabBoard[x][y] = playerId.toString().charAt(0);
 		}

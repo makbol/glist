@@ -18,7 +18,7 @@ public class Game implements Runnable {
      *  Częstotliwość przetwarzania pętli głównej gry wyrażona w liczbie
      *  pętli na sekunde
      */
-    private int frequency = 1;
+    private int frequency = 10;
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -79,7 +79,6 @@ public class Game implements Runnable {
         for (Player p : playersList) {
             p.setX(random.nextInt(width));
             p.setY(random.nextInt(height));
-            System.out.println("new player pos: "+p.getX()+" "+p.getY());
             try {
                 p.setDirection(Player.Direction.parse(random.nextInt(4)));
                 p.setVx(0);
@@ -97,7 +96,6 @@ public class Game implements Runnable {
             } catch (EnumIdOutOfBoundsException | BoardSizeException e) {
                 e.printStackTrace();
             }
-            System.out.println("propagate player pos: "+p.getX()+" "+p.getY());
             firePlayerPositionChanged(p, p.getX(), p.getY());
         }
     }
@@ -140,7 +138,7 @@ public class Game implements Runnable {
                 
 //                board.drawBoard();
 
-                Thread.sleep(10000/frequency);
+                Thread.sleep(1000/frequency);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
