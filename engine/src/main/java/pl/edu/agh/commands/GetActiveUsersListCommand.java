@@ -1,7 +1,5 @@
 package pl.edu.agh.commands;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import pl.edu.agh.core.BaseCommand;
 import pl.edu.agh.core.Room;
 import pl.edu.agh.model.Player;
