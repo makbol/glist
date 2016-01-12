@@ -92,7 +92,7 @@ public class Game implements Runnable {
                 } else if(p.getDirection() == Player.Direction.W) {
                     p.setVx(-1);
                 }
-                board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
+                board.setPlayerPosition(p.getX(), p.getY(), p.getUserId(), this);
             } catch (EnumIdOutOfBoundsException | BoardSizeException e) {
                 e.printStackTrace();
             }
@@ -129,7 +129,7 @@ public class Game implements Runnable {
                             break;
                     }
                     try {
-                        board.setPlayerPosition(p.getX(), p.getY(), p.getUserId());
+                        board.setPlayerPosition(p.getX(), p.getY(), p.getUserId(), this);
                         firePlayerPositionChanged(p, p.getX(), p.getY());
                     } catch (BoardSizeException e) {
                         onPlayerDied(p);
