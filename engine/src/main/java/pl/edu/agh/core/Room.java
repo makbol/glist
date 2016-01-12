@@ -1,5 +1,6 @@
 package pl.edu.agh.core;
 
+import com.google.gson.GsonBuilder;
 import pl.edu.agh.model.Game;
 import pl.edu.agh.model.Player;
 
@@ -45,7 +46,8 @@ public class Room {
         gameWorker.setName("GameWorker");
         gameWorker.setDaemon(true);
         gameWorker.start();
-        l.info("Game Started with "+players.size()+" players");
+        String plrs =  new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(players);
+        l.info("Game Started with "+plrs);
     }
     
     public boolean isGameRunning() {

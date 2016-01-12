@@ -1,5 +1,6 @@
 package pl.edu.agh.core;
 
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
@@ -130,6 +131,10 @@ public class TronServer extends WebSocketServer {
         if( command instanceof StartNewGameCommand ) {
             try{
                 room.startNewGame(gameHandler);
+                 List<Player> players = room.getPlayers();
+               
+                command.result = players;
+
             }catch(IllegalStateException ie) {
                 command.errorNo = -66;
                 command.errorDesc = "Game already running";
@@ -168,7 +173,9 @@ public class TronServer extends WebSocketServer {
                    break;
                }
            }
-           return command.getResultResponse();
+           String s = command.getResultResponse();
+           System.out.println(command.getClass().getSimpleName()+" "+s+" "+command.result);
+           return s;
        } else {
            return command.getErrorResponse();
        }
@@ -251,6 +258,10 @@ public class TronServer extends WebSocketServer {
    
     public static void main(String[] args) throws IOException {
        TronServer.getInstance().start();
+//        List<Player> pl = new ArrayList<>();
+//        pl.add(new Player("a"));
+//        System.out.println("GSON: "+new GsonBuilder().disableHtmlEscaping().create().toJson(pl));
+        
     }  
     
     private static class ClientEntry {

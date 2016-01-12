@@ -1,5 +1,7 @@
 package pl.edu.agh.commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import pl.edu.agh.core.BroadcastCommand;
 import pl.edu.agh.core.Room;
 import pl.edu.agh.model.Player;
@@ -25,7 +27,8 @@ public class StartNewGameCommand extends BroadcastCommand {
           errorNo = -66;
           errorDesc = "Game is running";
         } 
-        result="";
+       
+        result = "";
     }
 
     @Override
