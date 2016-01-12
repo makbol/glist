@@ -40,6 +40,7 @@ public class UpdateCommand extends BaseCommand {
         }
 
 //        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        System.out.println(activePlayers);
         result = activePlayers;
     }
 

@@ -59,36 +59,29 @@ Game.prototype = {
                           'v_y' : player.body.velocity.y } );
     }
 
-    player.body.setZeroVelocity();
+    // player.body.setZeroVelocity();
     
-    if (this.cursors.up.isDown) {
-      player.body.moveUp(300)
-    } else if (this.cursors.down.isDown) {
-      player.body.moveDown(300);
-    }
+    // if (this.cursors.up.isDown) {
+    //   player.body.moveUp(300)
+    // } else if (this.cursors.down.isDown) {
+    //   player.body.moveDown(300);
+    // }
     
-    if (this.cursors.left.isDown) {
-      player.body.velocity.x = -300;
-    } else if (this.cursors.right.isDown) {
-      player.body.moveRight(300);
-    }
+    // if (this.cursors.left.isDown) {
+    //   player.body.velocity.x = -300;
+    // } else if (this.cursors.right.isDown) {
+    //   player.body.moveRight(300);
+    // }
 
     playersList.forEach(function (tmpPlayer){
       
       var playerObject = playerToIdMap[tmpPlayer.userId];
       if (playerObject != undefined) {
-        if (tmpPlayer.userId != playerId ){ // getDistance(playerObject.body.x, playerObject.body.y, tmpPlayer.x, tmpPlayer.y) > 10) {
           playerObject.body.velocity.x = 0;//tmpPlayer.v_x;
           playerObject.body.velocity.y = 0;//tmpPlayer.v_y;
           playerObject.body.x = tmpPlayer.x;
           playerObject.body.y = tmpPlayer.y;
-        } else if(getDistance(playerObject.body.x, playerObject.body.y, tmpPlayer.x, tmpPlayer.y) > 10) {
-          playerObject.body.x = tmpPlayer.x;
-          playerObject.body.y = tmpPlayer.y;          
-        }
-
       } else {
-        // alert(playerObject)
         console.log(tmpPlayer)
       }
 

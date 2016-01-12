@@ -18,7 +18,7 @@ public class Game implements Runnable {
      *  Częstotliwość przetwarzania pętli głównej gry wyrażona w liczbie
      *  pętli na sekunde
      */
-    private int frequency = 10;
+    private int frequency = 1;
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -77,8 +77,8 @@ public class Game implements Runnable {
         Random random = new Random();
 
         for (Player p : playersList) {
-            p.setX(random.nextInt(width));
-            p.setY(random.nextInt(height));
+            p.setX(width/4+random.nextInt(3*(width/4)));
+            p.setY(height/4+random.nextInt(3*(height/4)));
             try {
                 p.setDirection(Player.Direction.parse(random.nextInt(4)));
                 p.setVx(0);
@@ -113,6 +113,7 @@ public class Game implements Runnable {
                 synchronized(playersList) {
                     currentPlayers = new ArrayList<>(playersList);
                 }
+                if( currentPlayers.size() < 2 ) break;
                 for (Player p : currentPlayers ) {
                     switch (p.getDirection()) {
                         case N:
@@ -143,7 +144,7 @@ public class Game implements Runnable {
                 e.printStackTrace();
             }
         }
-        
+        System.out.println("GameOver");
         fireGameEvent(new GameEndEvent());
     }
 

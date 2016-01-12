@@ -49,16 +49,17 @@ public class Board {
 	}
 
 	public void setPlayerPosition(int x, int y, UUID playerId, Game game) throws BoardSizeException {
-                if( x < 0 || y < 0 || x >= width || y >= height ) {
-                    throw new BoardSizeException("Board size exeeded");
-                }
+		if (x < 0 || y < 0 || x >= width || y >= height) {
+			throw new BoardSizeException("Board size exeeded");
+		}
 		if (colision.detectColision(this, x, y)) {
 			Player player = players.get(playerId);
-			if( player == null || player.getTimeOfDeath() != null) return;
+			if (player == null || player.getTimeOfDeath() != null)
+				return;
 			int timeOfDeath = player.getTimeOfDeath();
 			player.updateScore(timeOfDeath);
 			game.killPlayer(player);
-			
+
 		} else {
 			tabBoard[x][y] = playerId.toString().charAt(0);
 		}
