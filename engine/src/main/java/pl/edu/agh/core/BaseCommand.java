@@ -109,7 +109,6 @@ public abstract class BaseCommand {
         result.put(RESULT_PARAM, this.result);
         
         String m = new GsonBuilder().disableHtmlEscaping().create().toJson(result);
-        System.out.println(m);
         return m;
     }
     public String getErrorResponse() {

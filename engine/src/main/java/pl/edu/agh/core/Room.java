@@ -1,18 +1,25 @@
 package pl.edu.agh.core;
 
+import com.google.gson.GsonBuilder;
 import pl.edu.agh.model.Game;
 import pl.edu.agh.model.Player;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import pl.edu.agh.model.GameEvent;
 import pl.edu.agh.model.IGameEventHandler;
 
 /**
  * Klasa pokoju na serwerze.
  */
-public class Room {
+public class Room implements IGameEventHandler {
 
+     private static Logger l = LogManager.getLogger(TronServer.class);
+    
     /** Numer pokoju */
     private static long roomCounter = 0;
 
@@ -28,31 +35,22 @@ public class Room {
     /** Wątek przetwarzajacy logikę gry.  */
     private Thread gameWorker;
     
-    public void startNewGame(IGameEventHandler geh) {
-        
-        if( isGameRunning() ) {
-            System.out.println("Game alredy running");
-            throw new IllegalStateException("Game already running");
-        }
-        
-        game = new Game(players);
-        game.setEventHandler(geh);
-        gameWorker = new Thread(game);
-        gameWorker.setName("GameWorker");
-        gameWorker.setDaemon(true);
-        gameWorker.start();
+    /** Lista obiektów nasłuchujących zdarzeń z gry  */
+    private final List<IGameEventHandler> gameEventListeners;
+    
+    public Room() {
+        gameEventListeners = new ArrayList(1); // Naraize tylko TronServer słucha
     }
     
-    public boolean isGameRunning() {
-        return game!=null && gameWorker.isAlive();
+    //<editor-fold defaultstate="collapsed" desc="Accessors">
+    public long getRoomNo() {
+        return roomNo;
     }
-
-    public void registerGameEventHandler( IGameEventHandler gevh ) {
-        if( game != null ) {
-            game.setEventHandler(gevh);
-        }
-        throw new IllegalStateException("No game in room");
+    public Game getGame() {
+        return game;
     }
+//</editor-fold>
+    
     
     /**
      * Wywolanie komendy w danym pokoju. Logika zalezna od komendy.
@@ -67,41 +65,95 @@ public class Room {
         }
         return command;
     }
-
-    public List<Player> getPlayers() {
-        return players;
+    
+    //<editor-fold defaultstate="collapsed" desc="Player Management">
+    /**
+     * Dołącza nowego gracza do pokoju.
+     * UWaga ignoruje null argument
+     * @param p
+     */
+    public void registerPlayer( Player p ) {
+        if( p == null ) return;
+        
+        players.add(p);
     }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
-    public void addPlayer(Player player) {
-        if( player == null ) {
-            throw new NullPointerException("player must be not null");
-        } else {
-            this.players.add(player);
+    /**
+     * Usunięcie gracza z powodu rozłączaenia.
+     * Powoduje usuniecie gracza z pokoju oraz jego natychmiastowe zabice
+     * w grze jezeli takowa istnieje. Przewidzaine na okoliczność nagłego rozłączenia
+     */
+    public void removePlayer( Player p ) {
+        if( p == null ) return;
+        if( isGameRunning() ) {
+            game.killPlayer(p);
         }
-    }
-
-    public void playerLeft( Player p ) {
         players.remove(p);
-        if( game != null ) {
-            game.playerLeft(p);
+    }
+    
+//</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="GameManagement">
+    public void startNewGame() throws RoomException {
+        if( isGameRunning() ) {
+            throw new RoomException(RoomException.CAUSE.GAME_RUNNING);
+        }
+        if( players.size() < 2 ) {
+            throw new RoomException(RoomException.CAUSE.INSUFFICENT_PLAYERS);
+        }
+        
+        game = new Game(players);
+        game.setEventHandler(this);
+        gameWorker = new Thread(game);
+        gameWorker.setName("GameWorker");
+        gameWorker.setDaemon(true);
+        gameWorker.start();
+    }
+    
+    public void waitForGameInit() throws RoomException {
+        try{
+            game.waitForGameToStart();
+        }catch( InterruptedException ie ) {
+            throw new RoomException(RoomException.CAUSE.WAIT_INTERRUPTED);
         }
     }
     
-    public long getRoomNo() {
-        return roomNo;
-    }
-
-    public Game getGame() {
-        return game;
+    public boolean isGameRunning() {
+        return game!=null && gameWorker.isAlive();
     }
     
+    public List<Player> getGamePlayer() {
+        return game.getPlayersList();
+    }
+   
     public void endGame() {
         gameWorker.interrupt();
         game = null;
+        l.info("GameEnd");
     }
+    
+//</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="GameEventHandling">
+    public void registerGameEventHandler( IGameEventHandler geh ) {
+        synchronized(gameEventListeners) {
+            gameEventListeners.add(geh);
+        }
+    }
+    public void unregisterGameEventHandler( IGameEventHandler geh ) {
+        synchronized(gameEventListeners) {
+            gameEventListeners.remove(geh);
+        }
+    }
+    @Override
+    public void handleEvent(GameEvent e) {
+        synchronized(gameEventListeners) {
+            for( IGameEventHandler geh : gameEventListeners ) {
+                geh.handleEvent(e);
+            }
+        }
+    }
+//</editor-fold>
+    
+    
     
 }
