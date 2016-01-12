@@ -53,12 +53,12 @@ public class TronServer extends WebSocketServer {
       commandHandlers.add(this::onBroadcastExecuted);
       commandHandlers.add(this::onJoinExecuted);
       commandHandlers.add(this::onKillExecuted);
-      commandHandlers.add(this::onStartNewGameExecuted);
       gameHandler = new ServerGameEventHandler(this);
       room = createRoom();
     }
     private Room createRoom() {
         Room room = new Room();
+        room.registerGameEventHandler(gameHandler);
         return room;
     }
 
@@ -89,7 +89,7 @@ public class TronServer extends WebSocketServer {
         ClientEntry e = clientRegister.remove(socket.getRemoteSocketAddress());
         if( e != null ) {
             sockets.remove(e.player);
-            room.playerLeft(e.player);
+            room.removePlayer(e.player);
         }
         
     }
@@ -126,22 +126,6 @@ public class TronServer extends WebSocketServer {
             return true;
        }
        return false;
-    }
-    protected boolean onStartNewGameExecuted( WebSocket socket, Player player, BaseCommand command ) {
-        if( command instanceof StartNewGameCommand ) {
-            try{
-                room.startNewGame(gameHandler);
-                 List<Player> players = room.getPlayers();
-               
-                command.result = players;
-
-            }catch(IllegalStateException ie) {
-                command.errorNo = -66;
-                command.errorDesc = "Game already running";
-            }
-            return true;
-        }
-        return false;
     }
     protected boolean onJoinExecuted( WebSocket socket, Player player, BaseCommand command ) {
        if( command instanceof JoinGameCommand ) {

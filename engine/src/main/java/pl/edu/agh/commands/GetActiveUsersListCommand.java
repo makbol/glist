@@ -21,7 +21,7 @@ public class GetActiveUsersListCommand extends BaseCommand {
 
     @Override
     protected void execute(Room room, Player player) {
-        List<Player> players = room.getPlayers();
+        List<Player> players = room.getGamePlayer();
         List<Player> activePlayers = new ArrayList<>();
         for(Player player1 : players) {
             if(player1.getTimeOfDeath() == null) {

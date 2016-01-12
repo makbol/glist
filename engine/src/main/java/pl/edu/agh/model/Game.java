@@ -54,8 +54,15 @@ public class Game implements Runnable {
     
     
     public Game(List<Player> playersList) {
-        this.playersList = playersList;
-        initGame();
+        // FIX: Nie powinnismy uwspólniać listy graczy w pokoju z graczami w grze
+        // bo jak ktos przyjdzie do pokoju po rozpoczęcu gry
+        // to NIE może dołączyć do gry
+        this.playersList = new ArrayList(playersList);
+        
+        // FIX: Z punktu widzenia wieloœatkowosci czytelniej będzie jak 
+        // inicjalizcja czyli funkcj amoyfikujaca stan obiektu będzie
+        // wykoanna w dedeykowanym do tego wątku a nie na zewnątrz
+        //initGame();
     }
 
     private void initGame() {
@@ -96,20 +103,19 @@ public class Game implements Runnable {
     }
     
     public void run() {
-        
+        initGame();
         while (!Thread.interrupted()) {
+            // Zawiadamiam wszystkie wątki  które czekały by na zakończenie
+            // inicjalizacji Gry
+             synchronized(this) {
+                notifyAll();
+            }
             try {
                 List<Player> currentPlayers = null;
-                
                 synchronized(playersList) {
                     currentPlayers = new ArrayList<>(playersList);
                 }
-                
-                if( currentPlayers.size() < 2 ) {
-                    break;
-                }
-                
-                for (Player p : currentPlayers) {
+                for (Player p : currentPlayers ) {
                     switch (p.getDirection()) {
                         case N:
                             p.setY(p.getY() + 1);
@@ -131,9 +137,10 @@ public class Game implements Runnable {
                         onPlayerDied(p);
                     }
                 }
+                
 //                board.drawBoard();
 
-                Thread.sleep(1000/frequency);
+                Thread.sleep(10000/frequency);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -142,7 +149,14 @@ public class Game implements Runnable {
         fireGameEvent(new GameEndEvent());
     }
 
-    public void playerLeft( Player p ) {
+    public synchronized void waitForGameToStart() throws InterruptedException {
+        wait();
+    }
+    
+    public void killPlayer( Player p ) {
+        if( p == null )  {
+            throw new NullPointerException();
+        }
         synchronized(playersList) {
             playersList.remove(p);
         }

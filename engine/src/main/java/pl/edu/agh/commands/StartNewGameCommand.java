@@ -1,9 +1,13 @@
 package pl.edu.agh.commands;
 
+import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pl.edu.agh.core.BroadcastCommand;
 import pl.edu.agh.core.Room;
+import pl.edu.agh.core.RoomException;
 import pl.edu.agh.model.Player;
 
 /**
@@ -23,12 +27,34 @@ public class StartNewGameCommand extends BroadcastCommand {
     @Override
     protected void execute(Room room, Player player) {
         executor = player;
-        if( room.isGameRunning() ) {
-          errorNo = -66;
-          errorDesc = "Game is running";
-        } 
-       
-        result = "";
+        
+        try {
+            room.startNewGame();
+        } catch (RoomException ex) {
+            switch(ex.getCAUSE()) {
+                case GAME_RUNNING :
+                    errorNo = -6;
+                    errorDesc = ex.getMessage();
+                case INSUFFICENT_PLAYERS :
+                    errorNo = -7;
+                    errorDesc = ex.getMessage();
+            }
+            return;
+        }
+        
+        try {
+            room.waitForGameInit();
+        }catch( RoomException re ) {
+            switch(re.getCAUSE()) {
+                case WAIT_INTERRUPTED :
+                    errorNo = -8;
+                    errorDesc = re.getMessage();
+            }
+            return;
+        }
+        
+        
+        result = room.getGamePlayer();
     }
 
     @Override
@@ -38,11 +64,6 @@ public class StartNewGameCommand extends BroadcastCommand {
 
     @Override
     protected String getResponseFor(Player p) {
-//        if( p.equals(executor) ) {
-//            return "You stared the game";
-//        } else {
-//            return p.getUsername()+" started the game";
-//        }
         return accessResultResponse();
     }
 
