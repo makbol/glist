@@ -14,8 +14,8 @@ Game.prototype = {
     // var this.game.add.group();
 
     this.input.onDown.add(this.onInputDown, this);
-    this.game.add.tileSprite(0, 0, 1620, 1620, 'background'); 
-    this.game.world.setBounds(0, 0, 1620, 1620);
+    this.game.add.tileSprite(0, 0, 1000, 600, 'background'); 
+    this.game.world.setBounds(0, 0, 1000, 600);
     this.game.physics.startSystem(Phaser.Physics.P2JS);
     
     playersList.forEach(function (tmpPlayerObject){
@@ -28,7 +28,8 @@ Game.prototype = {
     player = playerToIdMap[playerId];
     this.game.camera.follow(player);
     this.cursors = this.game.input.keyboard.createCursorKeys();
-
+    console.log("Me: ")
+    console.log(player)
     // playerToIdMap[playerId] = player;
     // this.game.physics.p2.enable(player);
 

@@ -44,7 +44,6 @@ window.addEventListener('load', function () {
                   playerId = received_msg.result;
                   break;
                 case "startNewGame":
-                  // playersList = received_msg.result;
                   console.log("Game Started")
                   gameToStart = true;
                   break;
@@ -54,9 +53,10 @@ window.addEventListener('load', function () {
                     gameToStart = false;
                   }
                   playersList = received_msg.result;
-                  console.log(playersList)
                   break;
       			    case "GAME_OVER":
+                  console.log("HAAA")
+                  game.state.start('gameover');
       			    	break;
               }
 			     } catch(err) {
@@ -73,7 +73,7 @@ window.addEventListener('load', function () {
    }
 
 
-  var game = new Phaser.Game(1200, 800, Phaser.AUTO, 'tron-game');
+  var game = new Phaser.Game(1000, 600, Phaser.AUTO, 'tron-game');
 
   game.state.add('boot', ns.Boot);
   game.state.add('preloader', ns.Preloader);
