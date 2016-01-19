@@ -59,6 +59,10 @@ public abstract class BaseCommand {
                 return (T) new KillServerCommand(command);
             case TurnCommand.COMMAND_NAME:
                 return (T) new TurnCommand(command);
+            case LoginUserCommand.COMMAND_NAME:
+                return (T) new LoginUserCommand(command);
+            case RegisterUserCommand.COMMAND_NAME:
+                return (T) new RegisterUserCommand(command);
             default:
                 return null;
         }
