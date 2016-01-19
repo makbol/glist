@@ -82,6 +82,7 @@ Game.prototype = {
           playerObject.body.velocity.y = 0;//tmpPlayer.v_y;
           playerObject.body.x = tmpPlayer.x;
           playerObject.body.y = tmpPlayer.y;
+          self.game.add.sprite(tmpPlayer.x - 15, tmpPlayer.y - 15, 'player');
       } else {
         console.log(tmpPlayer)
       }
